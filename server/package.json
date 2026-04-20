@@ -4,6 +4,13 @@
   "description": "",
   "main": "server.js",
   "type": "module",
+  "imports": {
+    "#controllers/*": "./src/controllers/*.js",
+    "#routes/*": "./src/routes/*.js",
+    "#utils/*": "./src/utils/*.js",
+    "#middleware/*": "./src/middleware/*.js",
+    "#config/*": "./src/config/*.js"
+  },
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
