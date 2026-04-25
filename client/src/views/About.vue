@@ -1,6 +1,16 @@
 <template>
-  <div class="about">
+  <div class="About">
     <h1>About EV Charging Locator</h1>
+     <!-- Heading -->
+      <p class="section-tag">About ChargeNP</p>
+      <h2>Nepal's first dedicated EV charging locator</h2>
+
+      <p class="description">
+        ChargeNP was built to solve a real problem: EV drivers in Nepal had no reliable way 
+        to find working chargers before heading out on long trips. We mapped Nepal's entire 
+        charging network so you don't have to guess.
+      </p>
+
   </div>
 </template>
 
@@ -40,4 +50,5 @@ ul {
 li {
   margin-bottom: 10px;
 }
+
 </style>

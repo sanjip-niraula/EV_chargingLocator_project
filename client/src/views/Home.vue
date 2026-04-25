@@ -5,11 +5,9 @@
     <div class="hero">
       <!-- Left Content -->
       <div class="hero-text">
-        <span class="badge">GLOBAL EV CHARGING DISCOVERY</span>
 
         <h1>
-          Find EV Chargers.<br />
-          <span class="highlight">Anywhere<br /> in Nepal .</span>
+          Find EV Chargers.<br />Anywhere in Nepal.
         </h1>
 
         <p>
@@ -38,10 +36,6 @@
           frameborder="0"
         ></iframe>
 
-        <div class="map-info">
-          <span class="small-badge">GLOBAL CHARGER DISCOVERY</span>
-
-        </div>
       </div>
     </div>
   </div>
@@ -103,6 +97,7 @@
   align-items: center;
   padding: 60px;
   gap: 40px;
+  border-radius: 10px;
 }
 
 /* Text Section */
@@ -122,11 +117,8 @@ h1 {
   color: black;
   font-size: 60px;
   line-height: 1.1;
-  margin: 20px 0;
-}
-
-.highlight {
-  color: #00e5ff;
+  margin: 5px;
+  margin-left: 2px;
 }
 
 p {
@@ -164,14 +156,30 @@ p {
 .tags{
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px;
 }
 .tags span {
-  margin-right: 20px;
+  margin-right: 10px;
   font-size: 20px;
   background: rgba(66, 64, 64, 0.959);
   padding: 5px 20px;
   border-radius: 12px;
+}
+
+/* Map Card */
+.map-card {
+  position: relative;
+  width: 550px;
+  height: 380px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #111;
+}
+
+.map-card iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 </style>
