@@ -23,10 +23,10 @@
         </div>
 
         <div class="tags">
-          <span>Live station data</span>
-          <span>20+ Charging points</span>
-          <span>10+Districts covered </span>
-          <span>3 Connector types </span>
+          <span>Live station data</span><br>
+          <span>20+ Charging points</span><br>
+          <span>10+Districts covered </span><br>
+          <span>3 Connector types </span><br>
           <span>Free to use</span>
         </div>
       </div>
@@ -53,7 +53,7 @@
 <style scoped>
 /* Base */
 .home {
-  background: #020b14;
+  background: hsl(0, 0%, 100%);
   color: white;
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
@@ -119,6 +119,7 @@
 }
 
 h1 {
+  color: black;
   font-size: 60px;
   line-height: 1.1;
   margin: 20px 0;
@@ -129,7 +130,7 @@ h1 {
 }
 
 p {
-  color: #aaa;
+  color: hsl(0, 0%, 0%);
   margin-bottom: 25px;
 }
 
@@ -155,16 +156,21 @@ p {
   border: 1px solid #00e5ff;
   padding: 12px 20px;
   border-radius: 25px;
-  color: white;
+  color: rgb(0, 0, 0);
   cursor: pointer;
 }
 
 /* Tags */
+.tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .tags span {
-  margin-right: 10px;
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 6px 10px;
+  margin-right: 20px;
+  font-size: 20px;
+  background: rgba(66, 64, 64, 0.959);
+  padding: 5px 20px;
   border-radius: 12px;
 }
 
