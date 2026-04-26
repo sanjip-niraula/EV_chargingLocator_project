@@ -24,13 +24,13 @@ nav {
 }
 
 a {
-  color: #0066cc;
+  color: Black;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 a:hover {
-  color: #0052a3;
+  color: green;
 }
 </style>
