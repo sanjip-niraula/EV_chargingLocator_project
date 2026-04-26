@@ -3,6 +3,7 @@
   
     <!-- Hero Section -->
     <div class="hero">
+
       <!-- Left Content -->
       <div class="hero-text">
 
@@ -21,10 +22,10 @@
         </div>
 
         <div class="tags">
-          <span>Live station data</span><br>
-          <span>20+ Charging points</span><br>
-          <span>10+Districts covered </span><br>
-          <span>3 Connector types </span><br>
+          <span>Live station data</span>
+          <span>20+ Charging points</span>
+          <span>10+Districts covered </span>
+          <span>3 Connector types </span>
           <span>Free to use</span>
         </div>
       </div>
@@ -35,10 +36,34 @@
           src="https://www.openstreetmap.org/export/embed.html"
           frameborder="0"
         ></iframe>
-
       </div>
     </div>
-  </div>
+
+
+    <!-- CTA Section -->
+    <div class="cta">
+      <h2>Never range-anxiety again.</h2>
+      <p>
+        Join EV drivers across Nepal who plan smarter, drive further,
+        and charge with confidence.
+      </p>
+
+      <div class="buttons">
+        <button class="primary">Start locating stations</button>
+        <button class="secondary">Add your station</button>
+      </div>
+    </div>
+    <!-- Footer -->
+      <div class="footer-center">
+        © 2026 ChargeNP. Built for Nepal’s EV drivers.
+      </div>
+
+      <div class="footer-right">
+        <a href="#">Terms</a>
+        <a href="find">Add station</a>
+        <a href="About">About</a>
+      </div>
+    </div>
 </template>
 
 <script setup>
@@ -47,49 +72,13 @@
 <style scoped>
 /* Base */
 .home {
-  background: hsl(0, 0%, 100%);
+  background: whitesmoke;
   color: white;
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 60px;
-  background: rgba(0, 20, 40, 0.7);
-  backdrop-filter: blur(10px);
-}
 
-.logo {
-  font-weight: bold;
-  font-size: 20px;
-  color: #00e5ff;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 25px;
-  align-items: center;
-}
-
-.nav-links li {
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.nav-links li.active {
-  color: #00e5ff;
-}
-
-.nav-links .register {
-  border: 1px solid #00e5ff;
-  padding: 6px 14px;
-  border-radius: 20px;
-}
 /* Hero */
 .hero{
   display: flex;
@@ -180,6 +169,95 @@ p {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.cta-footer {
+  background: linear-gradient(180deg, #021a12, #01110c);
+  color: Black;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 80px 20px 60px;
+}
+
+.cta h2 {
+  color: green;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.cta p {
+  color: black;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.primary {
+  background: #10b981;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  color: Black;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid #10b981;
+  padding: 12px 22px;
+  border-radius: 8px;
+  color: Black;
+  cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+/* Center */
+.footer-center {
+  color: black;
+}
+
+/* Right */
+.footer-right a {
+  margin-left: 15px;
+  color: Black;
+  text-decoration: none;
+}
+
+.footer-right a:hover {
+  color: Green;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .hero{
+     flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
 }
 
 </style>
