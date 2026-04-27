@@ -44,6 +44,20 @@
           </p>
         </div>
       </div>
+
+ <h2 class="title">Team</h2>
+    <div class="team-container">
+      <div class="team-card" v-for="member in team" :key="member.name">
+        
+        <div class="avatar">
+          <img :src="member.image" :alt="member.name" />
+        </div>
+
+        <h3 class="name">{{ member.name }}</h3>
+        <p class="role">{{ member.role }}</p>
+      </div>
+    </div>
+
       <!-- Footer -->
       <div class="footer-center">
         © 2026 ChargeNP. Built for Nepal’s EV drivers.
@@ -54,10 +68,30 @@
         <a href="find">Add station</a>
         <a href="About">About</a>
       </div>
+
+      
   </div>
 </template>
 
 <script setup>
+const team = [
+  {
+    name: "Sanjip Niraula",
+    role: "Project Head & Backend",
+    image: ""
+  },
+  {
+    name: "Aayush Mishra",
+    role: "UI/UX & Frontent",
+    image: ""
+  },
+  {
+    name: "Rupesh Thakur",
+    role: "Backend",
+    image: ""
+  }
+]
+
 </script>
 
 <style scoped>
@@ -126,6 +160,71 @@ h2 {
   }
 
 }
+
+ /**Team */
+.title {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.team-card {
+  background: #05231d;
+  border: 1px solid #0f3b32;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  border-color: #1f8f75;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #00d09c;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.role {
+  font-size: 13px;
+  color: #8bd3c7;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .team-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .team-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* Footer */
 .footer {
