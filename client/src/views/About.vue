@@ -43,18 +43,16 @@
             by thousands of EV drivers searching daily.
           </p>
         </div>
-      </div>
+      </div><br>
 
       <!--Features Section-->
-      <p class="section-tag">About ChargeNP</p>
-      <h2>Nepal's first dedicated EV charging locator</h2>
-        <p class="descriptions">
-          Built for EV drivers who can’t afford surprises — especially on Nepal’s long highway stretches.
-        </p>
+      <h2>Everything you need on the road</h2>
+      <h1>Built for EV drivers who can't afford surprises
+         — especially on Nepal's long highway stretches.</h1>
 
-
+         
         <!--Team Member-->
-        <h2 class="title">Team</h2>
+        <h2>Team</h2>
         <div class="team-container">
           <div class="team-card" v-for="member in team" :key="member.name">
         
@@ -118,6 +116,10 @@ const team = [
   font-size: 30px;
   margin-bottom: 5px;
 }
+h1{
+  font-size:25px;
+  color: Black;
+}
 
 h2 {
   font-size: 32px;
@@ -142,7 +144,7 @@ p{
 }
 
 .card {
-  background: rgba(0, 0, 0, 0.4);
+  background:white;
   padding: 20px;
   border-radius: 12px;
   transition: 0.3s;
@@ -150,16 +152,17 @@ p{
 
 .card:hover {
   transform: translateY(-5px);
-  background: rgba(0, 0, 0, 0.6);
+  background: #F9F6EE;
 }
 
 .card h4 {
   margin-bottom: 10px;
+  color: Black;
 }
 
 .card p {
   font-size: 14px;
-  color: white;
+  color: black;
 }
 
 
