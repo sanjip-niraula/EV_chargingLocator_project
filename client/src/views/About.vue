@@ -45,18 +45,27 @@
         </div>
       </div>
 
- <h2 class="title">Team</h2>
-    <div class="team-container">
-      <div class="team-card" v-for="member in team" :key="member.name">
-        
-        <div class="avatar">
-          <img :src="member.image" :alt="member.name" />
-        </div>
+      <!--Features Section-->
+      <p class="section-tag">About ChargeNP</p>
+      <h2>Nepal's first dedicated EV charging locator</h2>
+        <p class="descriptions">
+          Built for EV drivers who can’t afford surprises — especially on Nepal’s long highway stretches.
+        </p>
 
-        <h3 class="name">{{ member.name }}</h3>
-        <p class="role">{{ member.role }}</p>
-      </div>
-    </div>
+
+        <!--Team Member-->
+        <h2 class="title">Team</h2>
+        <div class="team-container">
+          <div class="team-card" v-for="member in team" :key="member.name">
+        
+            <div class="avatar">
+                <img :src="member.image" :alt="member.name" />
+                </div>
+
+                <h3 class="name">{{ member.name }}</h3>
+                <p class="role">{{ member.role }}</p>
+              </div>
+            </div>
 
       <!-- Footer -->
       <div class="footer-center">
@@ -68,8 +77,6 @@
         <a href="find">Add station</a>
         <a href="About">About</a>
       </div>
-
-      
   </div>
 </template>
 
@@ -117,6 +124,9 @@ h2 {
   margin-bottom: 15px;
   color: black;
 }
+p{
+  color: black;
+}
 
 .description {
   color: black;
@@ -153,11 +163,15 @@ h2 {
 }
 
 
-/* Responsive */
+/* Responsive Card*/
 @media (max-width: 768px) {
   .cards {
     grid-template-columns: 1fr;
   }
+
+}
+
+.features{
 
 }
 
@@ -212,7 +226,7 @@ h2 {
   color: #8bd3c7;
 }
 
-/* Responsive */
+/* Responsive Team*/
 @media (max-width: 900px) {
   .team-container {
     grid-template-columns: repeat(2, 1fr);
@@ -252,7 +266,7 @@ h2 {
   color: Green;
 }
 
-/* Responsive */
+/* ResponsiveFooter */
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
