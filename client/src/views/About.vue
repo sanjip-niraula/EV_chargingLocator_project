@@ -50,7 +50,57 @@
       <h1>Built for EV drivers who can't afford surprises
          — especially on Nepal's long highway stretches.</h1>
 
-         
+      <div class="fetures">
+        <div class="feature">
+          <h4>Live station map</h4>
+          <p>
+            An interactive map of Nepal showing every registered charging station. 
+            Colour-coded pins update in real time — green means available, amber means 
+            busy, red means offline.
+          </p>
+           <ul>
+              <li>Covers all 77 districts</li>
+              <li>Prithvi, BP, and Arniko highways</li>
+              <li>Loads in under 2 seconds</li>
+            </ul>
+        </div><br>
+        <div class="feature">
+          <h4>One-tap Google Maps navigation</h4>
+          <p>
+           Open directions instantly with turn-by-turn navigation.
+          </p>
+           <ul>
+              <li>Instant Google Maps handoff</li>
+              <li>Works on any Android device</li>
+              <li>No copy-paste needed</li>
+            </ul>
+        </div><br>
+        <div class="feature">
+          <h4>Ratings,Reviews & Suggestion</h4>
+          <p>
+             Know the quality before you drive far.
+          </p>
+            <ul>
+              <li>Star ratings</li>
+              <li>Written reviews</li>
+              <li>Photo uploads</li>
+            </ul>
+        </div><br>
+        <div class="feature">
+          <h4>Live station map</h4>
+          <p>
+            An interactive map of Nepal showing every registered charging station. 
+            Colour-coded pins update in real time — green means available, amber means 
+            busy, red means offline.
+          </p>
+           <ul>
+              <li>Covers all 77 districts</li>
+              <li>Prithvi, BP, and Arniko highways</li>
+              <li>Loads in under 2 seconds</li>
+            </ul>
+        </div>
+      </div>
+
         <!--Team Member-->
         <h2>Team</h2>
         <div class="team-container">
@@ -140,14 +190,15 @@ p{
 .cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 10px;
 }
 
 .card {
   background:white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 12px;
   transition: 0.3s;
+  border: 1px solid black;
 }
 
 .card:hover {
@@ -174,10 +225,54 @@ p{
 
 }
 
-.features{
+/**Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  border-radius: 5px;
+  }
 
+.feature {
+  background:white;
+  padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+  border-color: blue;
+  border: 1px solid black;
 }
 
+.feature:hover {
+  transform: translateY(-5px);
+  background: #F9F6EE;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.feature h4 {
+  margin-bottom: 10px;
+  color: Black;
+}
+
+.feature p {
+  font-size: 14px;
+  color: black;
+}
+.feature ul {
+  margin-top: 5px;
+  padding: 5px;
+}
+.feature li {
+  color: Black;
+  font-size: 15px;
+  margin-bottom: 0px;
+}
+
+/* Responsive Features*/
+@media (max-width: 768px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+}
  /**Team */
 .title {
   font-size: 18px;
