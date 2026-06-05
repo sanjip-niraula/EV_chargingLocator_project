@@ -1,94 +1,116 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-
-const API = 'http://localhost:5000/api/auth'
-
-const loginUser = () => {
-  window.location.href = `${API}/google/user`
-}
-
-const loginOwner = () => {
-  window.location.href = `${API}/google/owner`
-}
 </script>
 
 <template>
   <div id="app">
-    <nav class="navbar">
-      <div class="logo">⚡ ChargeNP</div>
 
+    <!-- Navbar -->
+    <nav class="navbar">
+
+      <!-- Logo -->
+      <div class="logo">
+        ⚡ ChargeNP
+      </div>
+
+      <!-- Navigation Links -->
       <div class="nav-links">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/find">FindStation</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </div>
 
+      <!-- Login Buttons -->
       <div class="auth-buttons">
-        <button @click="loginUser">
-          EV User
-        </button>
 
-        <RouterLink to="/admin-login">
-          <button>
+        <!-- EV User Login -->
+        <RouterLink to="/login" class="btn-link">
+          <button class="login-btn">
+            EV User
+          </button>
+        </RouterLink>
+
+        <!-- Station Owner Login -->
+        <RouterLink to="/admin-login" class="btn-link">
+          <button class="login-btn">
             Station Owner
           </button>
         </RouterLink>
+
       </div>
+
     </nav>
 
+    <!-- Page Content -->
     <RouterView />
+
   </div>
 </template>
 
 <style scoped>
+/* Main Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 50px;
+  padding: 18px 50px;
   background: white;
   border-bottom: 1px solid #ddd;
 }
 
+/* Logo */
 .logo {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
-  color: green;
+  color: #0b8f15;
 }
 
+/* Center Links */
 .nav-links {
   display: flex;
-  gap: 25px;
+  gap: 30px;
 }
 
 .nav-links a {
   text-decoration: none;
   color: black;
-  font-weight: 500;
-  transition: color 0.3s;
+  font-size: 18px;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
 .nav-links a:hover {
-  color: green;
+  color: #0b8f15;
 }
 
+/* Right Buttons */
 .auth-buttons {
   display: flex;
   gap: 12px;
 }
 
-.auth-buttons button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  background: green;
+.btn-link {
+  text-decoration: none;
+}
+
+.login-btn {
+  padding: 10px 22px;
+  background: #0b8f15;
   color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.auth-buttons button:hover {
-  opacity: 0.9;
+.login-btn:hover {
+  background: #087410;
+}
+
+/* Active Route */
+.router-link-active {
+  color: #0b8f15 !important;
 }
 </style>
