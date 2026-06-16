@@ -1,0 +1,467 @@
+<template>
+  <div class="login-page">
+    <div class="login-card">
+
+      <!-- Left Side -->
+      <div class="login-info">
+        <div class="logo">⚡ ChargeNP</div>
+
+        <div class="portal-badge">
+          EV Charging Management System
+        </div>
+
+        <h1>Station Owner Portal</h1>
+
+        <p>
+          Manage your charging stations, monitor bookings,
+          update pricing and track revenue from a single dashboard.
+        </p>
+
+        <div class="features">
+          <div>✓ Manage EV Stations</div>
+          <div>✓ Real-Time Monitoring</div>
+          <div>✓ Booking Management</div>
+          <div>✓ Revenue Analytics</div>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="login-form">
+
+        <div class="tabs">
+          <button
+            :class="{ active: activeTab === 'login' }"
+            @click="activeTab = 'login'"
+            type="button"
+          >
+            Login
+          </button>
+
+          <button
+            :class="{ active: activeTab === 'signup' }"
+            @click="activeTab = 'signup'"
+            type="button"
+          >
+            Register
+          </button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form
+          v-if="activeTab === 'login'"
+          @submit.prevent="loginOwner"
+        >
+          <h2>Welcome Back 👋</h2>
+
+          <p class="subtitle">
+            Login to access your station dashboard.
+          </p>
+
+          <div class="input-group">
+            <label>Email Address</label>
+            <input
+              v-model="login.email"
+              type="email"
+              placeholder="owner@example.com"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+
+            <div class="password-box">
+              <input
+                v-model="login.password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Enter Password"
+                required
+              />
+
+              <span
+                class="toggle-password"
+                @click="showPassword = !showPassword"
+              >
+                {{ showPassword ? '🙈' : '👁️' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="options">
+            <label>
+              <input
+                type="checkbox"
+                v-model="login.remember"
+              />
+              Remember Me
+            </label>
+
+            <a href="#">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="login-btn">
+            Login
+          </button>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form
+          v-else
+          @submit.prevent="registerOwner"
+        >
+          <h2>Create Owner Account</h2>
+
+          <p class="subtitle">
+            Register your EV charging business.
+          </p>
+
+          <div class="signup-grid">
+
+            <div class="input-group">
+              <label>Full Name</label>
+              <input
+                v-model="signup.fullName"
+                type="text"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Business Name</label>
+              <input
+                v-model="signup.businessName"
+                type="text"
+                placeholder="Business Name"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Email</label>
+              <input
+                v-model="signup.email"
+                type="email"
+                placeholder="example@gmail.com"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Phone Number</label>
+              <input
+                v-model="signup.phone"
+                type="text"
+                placeholder="+977 98XXXXXXXX"
+                required
+              />
+            </div>
+
+            <div class="input-group full-width">
+              <label>Station Location</label>
+              <input
+                v-model="signup.stationLocation"
+                type="text"
+                placeholder="Pokhara, Nepal"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Password</label>
+              <input
+                v-model="signup.password"
+                type="password"
+                placeholder="Create Password"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Confirm Password</label>
+              <input
+                v-model="signup.confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+
+          </div>
+
+          <div class="terms">
+            <input
+              type="checkbox"
+              v-model="signup.agree"
+            />
+
+            <span>
+              I agree to the Terms & Conditions
+            </span>
+          </div>
+
+          <button type="submit" class="login-btn">
+            Create Account
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const activeTab = ref("login");
+const showPassword = ref(false);
+
+const login = ref({
+  email: "",
+  password: "",
+  remember: false
+});
+
+const signup = ref({
+  fullName: "",
+  businessName: "",
+  email: "",
+  phone: "",
+  stationLocation: "",
+  password: "",
+  confirmPassword: "",
+  agree: false
+});
+
+const loginOwner = () => {
+  console.log("Login Data:", login.value);
+
+  // Example:
+  // router.push('/owner-dashboard')
+};
+
+const registerOwner = () => {
+  if (signup.value.password !== signup.value.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  if (!signup.value.agree) {
+    alert("Please accept Terms & Conditions");
+    return;
+  }
+
+  console.log("Signup Data:", signup.value);
+
+  // API Call Here
+};
+</script>
+
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background: linear-gradient(
+    135deg,
+    #022c22,
+    #063d33,
+    #021f1b
+  );
+}
+
+.login-card {
+  width: 1150px;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 25px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.login-info {
+  padding: 60px;
+  background: linear-gradient(
+    135deg,
+    #00c17c,
+    #008f5c
+  );
+  color: white;
+}
+
+.logo {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.portal-badge {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.2);
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.login-info h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.login-info p {
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-form {
+  padding: 50px;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 30px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tabs button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tabs button.active {
+  background: #00c17c;
+  color: white;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  transition: .3s;
+}
+
+.input-group input:focus {
+  border-color: #00c17c;
+  box-shadow: 0 0 0 4px rgba(0,193,124,.15);
+}
+
+.password-box {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.options a {
+  color: #00c17c;
+  text-decoration: none;
+}
+
+.signup-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.terms {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0 25px;
+}
+
+.login-btn {
+  width: 100%;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  background: #00c17c;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  background: #009d66;
+}
+
+@media(max-width:900px) {
+  .login-card {
+    grid-template-columns: 1fr;
+  }
+
+  .login-info {
+    display: none;
+  }
+
+  .signup-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .login-form {
+    padding: 30px;
+  }
+}
+</style>
