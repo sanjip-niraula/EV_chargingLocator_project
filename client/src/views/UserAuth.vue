@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api.js'
+import { validateLogin, validateUserSignup } from '../utils/validation.js'
 
 const router = useRouter()
 
 const activeTab = ref('login')
 const showPassword = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
+const successMessage = ref('')
 
 const loginData = ref({
   email: '',
@@ -23,24 +28,92 @@ const signupData = ref({
   agree: false
 })
 
-const login = () => {
-  localStorage.setItem('userAuth', 'true')
-  router.push('/user/dashboard')
+const login = async () => {
+  try {
+    errorMessage.value = ''
+    successMessage.value = ''
+    
+    // Frontend validation
+    const validation = validateLogin(loginData.value.email, loginData.value.password)
+    if (!validation.valid) {
+      errorMessage.value = validation.errors[0]
+      return
+    }
+    
+    loading.value = true
+    
+    const response = await api.post('/account/login', {
+      email: loginData.value.email,
+      password: loginData.value.password
+    })
+
+    if (response.data.success) {
+      // Store token and user data
+      localStorage.setItem('userAuth', 'true')
+      localStorage.setItem('authToken', response.data.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.data.user))
+      
+      successMessage.value = 'Login successful! Redirecting...'
+      
+      // Redirect after short delay
+      setTimeout(() => {
+        router.push('/user/dashboard')
+      }, 1000)
+    }
+  } catch (err) {
+    console.error('Login error:', err)
+    errorMessage.value = err.response?.data?.message || 'Login failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
 }
 
-const register = () => {
-  if (signupData.value.password !== signupData.value.confirmPassword) {
-    alert('Passwords do not match')
-    return
-  }
+const register = async () => {
+  try {
+    errorMessage.value = ''
+    successMessage.value = ''
+    
+    // Frontend validation
+    const validation = validateUserSignup(signupData.value)
+    if (!validation.valid) {
+      errorMessage.value = validation.errors[0]
+      return
+    }
 
-  if (!signupData.value.agree) {
-    alert('Please accept Terms & Conditions')
-    return
-  }
+    loading.value = true
+    
+    const response = await api.post('/account/register', {
+      name: signupData.value.fullName,
+      email: signupData.value.email,
+      phone: signupData.value.phone,
+      vehicleType: signupData.value.vehicleType,
+      password: signupData.value.password
+    })
 
-  alert('Account Created Successfully!')
-  activeTab.value = 'login'
+    if (response.data.success) {
+      successMessage.value = 'Account created successfully! Switching to login...'
+      
+      // Reset form and switch to login tab
+      setTimeout(() => {
+        signupData.value = {
+          fullName: '',
+          email: '',
+          phone: '',
+          vehicleType: '',
+          password: '',
+          confirmPassword: '',
+          agree: false
+        }
+        activeTab.value = 'login'
+        successMessage.value = ''
+      }, 1500)
+    }
+  } catch (err) {
+    console.error('Registration error:', err)
+    errorMessage.value = err.response?.data?.message || 'Registration failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -71,7 +144,8 @@ const register = () => {
         <div class="features">
           <div>✓ Find Nearby Stations</div>
           <div>✓ Live Availability</div>
-          
+          <div>✓ Book Charging Slots</div>
+          <div>✓ Track Your Sessions</div>
         </div>
 
       </div>
@@ -99,6 +173,16 @@ const register = () => {
 
         </div>
 
+        <!-- ERROR MESSAGE -->
+        <div v-if="errorMessage" class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div v-if="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+
         <!-- LOGIN -->
         <form
           v-if="activeTab === 'login'"
@@ -118,6 +202,7 @@ const register = () => {
               v-model="loginData.email"
               placeholder="Enter email"
               required
+              :disabled="loading"
             />
           </div>
 
@@ -131,6 +216,7 @@ const register = () => {
                 v-model="loginData.password"
                 placeholder="Enter password"
                 required
+                :disabled="loading"
               />
 
               <span
@@ -149,6 +235,7 @@ const register = () => {
               <input
                 type="checkbox"
                 v-model="loginData.remember"
+                :disabled="loading"
               />
               Remember Me
             </label>
@@ -162,8 +249,9 @@ const register = () => {
           <button
             type="submit"
             class="auth-btn"
+            :disabled="loading"
           >
-            Login
+            {{ loading ? 'Logging in...' : 'Login' }}
           </button>
 
         </form>
@@ -190,6 +278,7 @@ const register = () => {
                 v-model="signupData.fullName"
                 placeholder="Full Name"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -201,6 +290,7 @@ const register = () => {
                 v-model="signupData.email"
                 placeholder="example@gmail.com"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -212,6 +302,7 @@ const register = () => {
                 v-model="signupData.phone"
                 placeholder="+977 98XXXXXXXX"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -221,6 +312,7 @@ const register = () => {
               <select
                 v-model="signupData.vehicleType"
                 required
+                :disabled="loading"
               >
                 <option value="">
                   Select Vehicle
@@ -239,8 +331,9 @@ const register = () => {
               <input
                 type="password"
                 v-model="signupData.password"
-                placeholder="Create Password"
+                placeholder="Create Password (Min 6 chars, 1 uppercase, 1 number)"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -252,6 +345,7 @@ const register = () => {
                 v-model="signupData.confirmPassword"
                 placeholder="Confirm Password"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -262,6 +356,7 @@ const register = () => {
             <input
               type="checkbox"
               v-model="signupData.agree"
+              :disabled="loading"
             />
 
             <span>
@@ -273,8 +368,9 @@ const register = () => {
           <button
             type="submit"
             class="auth-btn"
+            :disabled="loading"
           >
-            Create Account
+            {{ loading ? 'Creating Account...' : 'Create Account' }}
           </button>
 
         </form>
@@ -384,6 +480,26 @@ const register = () => {
   color:white;
 }
 
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-error {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.alert-success {
+  background: #efe;
+  color: #3c3;
+  border: 1px solid #cfc;
+}
+
 .subtitle{
   color:#6b7280;
   margin-bottom:25px;
@@ -397,6 +513,7 @@ const register = () => {
   display:block;
   margin-bottom:8px;
   font-weight:600;
+  font-size: 14px;
 }
 
 .input-group input,
@@ -406,12 +523,19 @@ const register = () => {
   border:1px solid #d1d5db;
   border-radius:10px;
   outline:none;
+  font-size: 14px;
 }
 
 .input-group input:focus,
 .input-group select:focus{
   border-color:#00c17c;
   box-shadow:0 0 0 4px rgba(0,193,124,.15);
+}
+
+.input-group input:disabled,
+.input-group select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
 }
 
 .password-box{
@@ -429,6 +553,7 @@ const register = () => {
   display:flex;
   justify-content:space-between;
   margin-bottom:25px;
+  font-size: 14px;
 }
 
 .options a{
@@ -447,6 +572,7 @@ const register = () => {
   align-items:center;
   gap:10px;
   margin:20px 0;
+  font-size: 14px;
 }
 
 .auth-btn{
@@ -462,9 +588,15 @@ const register = () => {
   transition:.3s;
 }
 
-.auth-btn:hover{
+.auth-btn:hover:not(:disabled){
   background:#009d66;
   transform:translateY(-2px);
+}
+
+.auth-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media(max-width:900px){
