@@ -11,7 +11,7 @@ const logout = () => {
 
 <template>
   <div class="dashboard">
-    <h1>Admin Dashboard</h1>
+    <h1>Station Dashboard</h1>
 
     <div class="cards">
       <div class="card">

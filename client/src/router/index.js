@@ -4,11 +4,10 @@ import Home from '../views/Home.vue'
 import FindStation from '../views/FindStation.vue'
 import About from '../views/About.vue'
 
-import AdminLogin from '../views/AdminLogin.vue'
-import AdminDashboard from '../views/AdminDashboard.vue'
+import StationLogin from '../views/StationLogin.vue'
+import StationDashboard from '../views/StationDashboard.vue'
 
-import UserLogin from '../views/UserLogin.vue'
-import UserSignup from '../views/UserSignup.vue'
+import UserAuth from '../views/UserAuth.vue'
 import UserDashboard from '../views/UserDashboard.vue'
 
 const routes = [
@@ -30,20 +29,12 @@ const routes = [
     component: About
   },
 
-  // =========================
-  // EV USER ROUTES
-  // =========================
+  // USER
 
   {
-    path: '/login',
-    name: 'UserLogin',
-    component: UserLogin
-  },
-
-  {
-    path: '/signup',
-    name: 'UserSignup',
-    component: UserSignup
+    path: '/user-auth',
+    name: 'UserAuth',
+    component: UserAuth
   },
 
   {
@@ -53,22 +44,21 @@ const routes = [
     meta: { requiresUser: true }
   },
 
-  // =========================
-  // ADMIN ROUTES
-  // =========================
+  // STATION OWNER
 
   {
     path: '/admin-login',
     name: 'AdminLogin',
-    component: AdminLogin
+    component: StationLogin
   },
 
-  {
-    path: '/admin/dashboard',
-    name: 'AdminDashboard',
-    component: AdminDashboard,
-    meta: { requiresAdmin: true }
-  }
+ {
+  path: '/admin/dashboard',
+  name: 'AdminDashboard',
+  component: StationDashboard,
+  meta: { requiresAdmin: true }
+}
+
 ]
 
 const router = createRouter({
@@ -76,11 +66,10 @@ const router = createRouter({
   routes
 })
 
-// Route Protection
 router.beforeEach((to, from, next) => {
 
-  // Admin Protection
   if (to.meta.requiresAdmin) {
+
     const isAdmin = localStorage.getItem('adminAuth')
 
     if (!isAdmin) {
@@ -88,22 +77,25 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
+
   }
 
-  // User Protection
   else if (to.meta.requiresUser) {
+
     const isUser = localStorage.getItem('userAuth')
 
     if (!isUser) {
-      next('/login')
+      next('/user-auth')
     } else {
       next()
     }
+
   }
 
   else {
     next()
   }
+
 })
 
-export default router;
+export default router
