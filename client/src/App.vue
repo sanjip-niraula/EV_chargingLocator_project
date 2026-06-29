@@ -26,14 +26,14 @@ import { RouterLink, RouterView } from 'vue-router'
         <!-- EV User Login -->
         <RouterLink to="/user-auth">
   <button class="login-btn">
-    EV User
+    🚗 EV User
   </button>
 </RouterLink>
 
         <!-- Station Owner Login -->
         <RouterLink to="/admin-login" class="btn-link">
           <button class="login-btn">
-            Station Owner
+           🔌 Station Owner
           </button>
         </RouterLink>
 
