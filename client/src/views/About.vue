@@ -1,376 +1,279 @@
 <template>
-  <div class="About">
-  
-      <!-- Heading -->
-      <p class="section-tag">About ChargeNP</p>
-      <h2>Nepal's first dedicated EV charging locator</h2>
+  <div class="about-page">
+    
+    <!-- Hero Section -->
+    <header class="about-hero">
+      <div class="hero-content">
+        <h1 class="gradient-text">Nepal's First Dedicated EV Charging Network</h1>
+        <p class="hero-sub">
+          ChargeNP was built to solve a real problem: EV drivers in Nepal had no reliable way 
+          to find working chargers before heading out on long trips. We've mapped the entire 
+          network so you can drive with confidence.
+        </p>
+      </div>
+      <div class="hero-glow"></div>
+    </header>
 
-      <p class="description">
-        ChargeNP was built to solve a real problem: EV drivers in Nepal had no reliable way 
-        to find working chargers before heading out on long trips. We mapped Nepal's entire 
-        charging network so you don't have to guess.
-      </p>
-
-      <!-- Cards -->
-      <div class="cards">
-        <div class="card">
-          <h4>Our mission</h4>
-          <p>
-            To remove range anxiety from every EV journey in Nepal by giving drivers accurate,
-            real-time information about charging infrastructure across the country.
-          </p>
+    <!-- Mission & Vision -->
+    <section class="mission-section">
+      <div class="section-grid">
+        <div class="card glass">
+          <div class="card-icon">🎯</div>
+          <h3>Our Mission</h3>
+          <p>To eliminate "range anxiety" from every EV journey in Nepal by providing accurate, real-time data on every charging station across the country.</p>
         </div>
-
-        <div class="card">
-          <h4>Built for Nepal</h4>
-          <p>
-            We support Nepal's  major connector standards — CCS2, GB/T, and Type 2 and
-            cover NEA stations as well as private hubs across all major highways.
-          </p>
+        <div class="card glass">
+          <div class="card-icon">🏗️</div>
+          <h3>Built for Nepal</h3>
+          <p>We support all major standards—CCS2, GB/T, and Type 2—covering NEA stations as well as private hubs across major highway arteries.</p>
         </div>
-
-        <div class="card">
-          <h4>Technology</h4>
-          <p>
-            
-          </p>
-        </div>
-
-        <div class="card">
-          <h4>For station owners</h4>
-          <p>
-            Register your charging station, manage charger status in real time, and get discovered
-            by thousands of EV drivers searching daily.
-          </p>
-        </div>
-      </div><br>
-
-      <!--Features Section-->
-      <h2>Everything you need on the road</h2>
-      <h1>Built for EV drivers who can't afford surprises
-         — especially on Nepal's long highway stretches.</h1>
-
-      <div class="fetures">
-        <div class="feature">
-          <h4>Live station map</h4>
-          <p>
-            An interactive map of Nepal showing every registered charging station. 
-            Colour-coded pins update in real time — green means available, amber means 
-            busy, red means offline.
-          </p>
-           <ul>
-              <li>Covers all 77 districts</li>
-              <li>Prithvi, BP, and Arniko highways</li>
-              <li>Loads in under 2 seconds</li>
-            </ul>
-        </div><br>
-        <div class="feature">
-          <h4>One-tap Google Maps navigation</h4>
-          <p>
-           Open directions instantly with turn-by-turn navigation.
-          </p>
-           <ul>
-              <li>Instant Google Maps handoff</li>
-              <li>Works on any Android device</li>
-              <li>No copy-paste needed</li>
-            </ul>
-        </div><br>
-        <div class="feature">
-          <h4>Ratings,Reviews & Suggestion</h4>
-          <p>
-             Know the quality before you drive far.
-          </p>
-            <ul>
-              <li>Star ratings</li>
-              <li>Written reviews</li>
-              <li>Photo uploads</li>
-            </ul>
-        </div><br>
-        <div class="feature">
-          <h4>Live station map</h4>
-          <p>
-            An interactive map of Nepal showing every registered charging station. 
-            Colour-coded pins update in real time — green means available, amber means 
-            busy, red means offline.
-          </p>
-           <ul>
-              <li>Covers all 77 districts</li>
-              <li>Prithvi, BP, and Arniko highways</li>
-              <li>Loads in under 2 seconds</li>
-            </ul>
+        <div class="card glass">
+          <div class="card-icon">🤝</div>
+          <h3>For Owners</h3>
+          <p>We provide station owners with the digital tools needed to manage their ports, monitor status, and connect with a growing community of drivers.</p>
         </div>
       </div>
+    </section>
 
-        <!--Team Member-->
-        <h2>Team</h2>
-        <div class="team-container">
-          <div class="team-card" v-for="member in team" :key="member.name">
-        
-            <div class="avatar">
-                <img :src="member.image" :alt="member.name" />
-                </div>
-
-                <h3 class="name">{{ member.name }}</h3>
-                <p class="role">{{ member.role }}</p>
-              </div>
-            </div>
-
-      <!-- Footer -->
-      <div class="footer-center">
-        © 2026 ChargeNP. Built for Nepal’s EV drivers.
+    <!-- Features -->
+    <section class="features-section">
+      <h2 class="section-title">Everything you need on the road</h2>
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="f-icon">📍</div>
+          <div class="f-text">
+            <h4>Live Status Map</h4>
+            <p>Every district covered. Colour-coded pins update every 15 seconds—green means free, red means occupied.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="f-icon">🧭</div>
+          <div class="f-text">
+            <h4>Seamless Navigation</h4>
+            <p>One-tap handoff to Google Maps for turn-by-turn directions. No copy-pasting coordinates required.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="f-icon">⭐</div>
+          <div class="f-text">
+            <h4>Trusted Community</h4>
+            <p>Read honest ratings and photos from fellow drivers before you arrive. Know the charger quality upfront.</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="footer-right">
-        <a href="#">Terms</a>
-        <a href="find">Add station</a>
-        <a href="About">About</a>
+    <!-- Team -->
+    <section class="team-section">
+      <h2 class="section-title">Meet the Team</h2>
+      <div class="team-grid">
+        <div v-for="m in team" :key="m.name" class="team-card">
+          <div class="member-av">{{ m.name[0] }}</div>
+          <h4>{{ m.name }}</h4>
+          <p>{{ m.role }}</p>
+        </div>
       </div>
+    </section>
+
+    <footer class="about-footer">
+      <div class="footer-inner">
+        <div class="footer-logo">⚡ ChargeNP</div>
+        <p>© 2026. Built for Nepal’s EV drivers.</p>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script setup>
 const team = [
-  {
-    name: "Sanjip Niraula",
-    role: "Project Head & Backend",
-    image: ""
-  },
-  {
-    name: "Aayush Mishra",
-    role: "UI/UX & Frontent",
-    image: ""
-  },
-  {
-    name: "Rupesh Thakur",
-    role: "Backend",
-    image: ""
-  }
+  { name: "Sanjip Niraula", role: "Project Head & Backend" },
+  { name: "Aayush Mishra", role: "UI/UX & Frontend" },
+  { name: "Rupesh Thakur", role: "Backend Architecture" }
 ]
-
 </script>
 
 <style scoped>
-.About {
-  background: whitesmoke;
-  color: white;
-  padding: 50px 20px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.about-page {
+  background: #0a0e1a;
+  color: #f1f5f9;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
+.about-hero {
+  position: relative;
+  padding: 100px 60px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.section-tag {
-  color: green;
-  font-size: 30px;
-  margin-bottom: 5px;
-}
-h1{
-  font-size:25px;
-  color: Black;
+.hero-content {
+  max-width: 800px;
+  position: relative;
+  z-index: 1;
 }
 
-h2 {
-  font-size: 32px;
-  margin-bottom: 15px;
-  color: black;
-}
-p{
-  color: black;
-}
-
-.description {
-  color: black;
-  max-width: 700px;
-  margin-bottom: 30px;
+.gradient-text {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #00e59d, #00b4d8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Cards */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.card {
-  background:white;
-  padding: 10px;
-  border-radius: 12px;
-  transition: 0.3s;
-  border: 1px solid black;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  background: #F9F6EE;
-}
-
-.card h4 {
-  margin-bottom: 10px;
-  color: Black;
-}
-
-.card p {
-  font-size: 14px;
-  color: black;
-}
-
-
-/* Responsive Card*/
-@media (max-width: 768px) {
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-/**Features */
-.features {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 50px;
-  border-radius: 5px;
-  }
-
-.feature {
-  background:white;
-  padding: 20px;
-  border-radius: 12px;
-  transition: 0.3s;
-  border-color: blue;
-  border: 1px solid black;
-}
-
-.feature:hover {
-  transform: translateY(-5px);
-  background: #F9F6EE;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-.feature h4 {
-  margin-bottom: 10px;
-  color: Black;
-}
-
-.feature p {
-  font-size: 14px;
-  color: black;
-}
-.feature ul {
-  margin-top: 5px;
-  padding: 5px;
-}
-.feature li {
-  color: Black;
-  font-size: 15px;
-  margin-bottom: 0px;
-}
-
-/* Responsive Features*/
-@media (max-width: 768px) {
-  .features {
-    grid-template-columns: 1fr;
-  }
-
-}
- /**Team */
-.title {
+.hero-sub {
   font-size: 18px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+
+.hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 229, 157, 0.08) 0%, transparent 70%);
+}
+
+.mission-section {
+  padding: 80px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card.glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 32px;
+  border-radius: 24px;
+  transition: transform 0.3s;
+}
+
+.card.glass:hover {
+  transform: translateY(-8px);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(0, 229, 157, 0.3);
+}
+
+.card-icon { font-size: 40px; margin-bottom: 20px; }
+.card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.card p { font-size: 15px; color: #64748b; line-height: 1.6; }
+
+.features-section {
+  padding: 80px 60px;
+  background: rgba(255,255,255,0.01);
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.features-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.feature-item {
+  text-align: center;
+}
+
+.f-icon {
+  font-size: 48px;
   margin-bottom: 20px;
 }
 
-.team-container {
+.f-text h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.f-text p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.team-section {
+  padding: 100px 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.team-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 32px;
 }
 
 .team-card {
-  background: #05231d;
-  border: 1px solid #0f3b32;
-  border-radius: 12px;
-  padding: 30px 20px;
+  background: rgba(255,255,255,0.03);
+  padding: 40px 20px;
+  border-radius: 20px;
   text-align: center;
-  transition: 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-.team-card:hover {
-  transform: translateY(-5px);
-  border-color: #1f8f75;
-}
-
-.avatar {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 15px;
+.member-av {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  background: #1f2937;
   border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #00d09c;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.name {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.role {
-  font-size: 13px;
-  color: #8bd3c7;
-}
-
-/* Responsive Team*/
-@media (max-width: 900px) {
-  .team-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
-  .team-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* Footer */
-.footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 20px 40px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #00e59d;
+  border: 2px solid rgba(0, 229, 157, 0.4);
 }
 
-/* Center */
-.footer-center {
-  color: black;
+.team-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.team-card p { font-size: 13px; color: #64748b; }
+
+.about-footer {
+  padding: 60px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
 }
 
-/* Right */
-.footer-right a {
-  margin-left: 15px;
-  color: Black;
-  text-decoration: none;
+.footer-logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: #00e59d;
+  margin-bottom: 8px;
 }
 
-.footer-right a:hover {
-  color: Green;
+.footer-inner p {
+  color: #334155;
+  font-size: 14px;
 }
 
-/* ResponsiveFooter */
-@media (max-width: 768px) {
-  .footer {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
+@media (max-width: 900px) {
+  .section-grid, .features-list, .team-grid { grid-template-columns: 1fr; }
+  .gradient-text { font-size: 38px; }
+  .about-hero { padding: 60px 20px; }
 }
-
 </style>

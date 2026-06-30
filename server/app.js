@@ -2,7 +2,7 @@ import express from "express";
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import { userRoutes, usersRoutes, stationRoutes, chargerRoutes, bookingRoutes, paymentRoutes } from "#routes/index";
+import { userRoutes, usersRoutes, stationRoutes, chargerRoutes, reviewRoutes } from "#routes/index";
 import errorMiddleware from "#middleware/errorMiddleware";
 
 const app = express();
@@ -19,8 +19,7 @@ app.use('/api/account', userRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/stations', stationRoutes);
 app.use('/api/chargers', chargerRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

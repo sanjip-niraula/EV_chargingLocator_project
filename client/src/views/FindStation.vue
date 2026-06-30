@@ -1,91 +1,206 @@
 <template>
-  <div class="station-page">
+  <div class="find-page">
+
+    <!-- Page Header -->
     <div class="page-header">
       <h1>Find Charging Stations</h1>
-      <p>Live availability updated every 15 seconds</p>
+      <p>Live availability · Updated every 15 seconds</p>
     </div>
 
-    <div v-if="loading" class="loading">Loading stations...</div>
-    <div v-else-if="error" class="error-msg">{{ error }}</div>
+    <div class="find-layout">
 
-    <div v-else class="station-container">
-      <div class="filter-panel">
-        <h3>Search Filters</h3>
-        <div class="form-group">
-          <label>Search (city/station)</label>
-          <input v-model="searchQuery" type="text" placeholder="Search station..." />
-        </div>
-        <div class="form-group">
-          <label>Connector Type</label>
-          <select v-model="connectorType">
-            <option value="">All</option>
-            <option value="CCS">CCS</option>
-            <option value="Type2">Type2</option>
-            <option value="GBT">GBT</option>
-            <option value="CHAdeMO">CHAdeMO</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Minimum Power (kW)</label>
-          <input v-model.number="minPower" type="number" placeholder="0" />
-        </div>
-        <div class="form-group">
-          <label>Availability</label>
-          <select v-model="availability">
-            <option value="">All</option>
-            <option value="available">Available</option>
-            <option value="busy">Busy</option>
-          </select>
-        </div>
-        <button class="filter-btn" @click="loadStations">Refresh Live Status</button>
-      </div>
-
-      <div class="station-list">
-        <div v-for="station in filteredStations" :key="station._id" class="station-card">
-          <span class="status" :class="station.liveSummary?.status || 'offline'">
-            {{ statusLabel(station.liveSummary?.status) }}
-          </span>
-          <h2>{{ station.name }}</h2>
-          <p class="location">{{ station.address?.formatted || station.address?.city }}</p>
-          <div class="info-tags">
-            <span>Ports: {{ station.liveSummary?.available || 0 }}/{{ station.liveSummary?.totalPorts || 0 }} free</span>
-            <span v-if="station.liveSummary?.connectors?.length">
-              {{ station.liveSummary.connectors.join(', ') }}
-            </span>
-            <span v-if="station.liveSummary?.maxPower">Up to {{ station.liveSummary.maxPower }} kW</span>
-            <span v-if="station.liveSummary?.minPrice">From Rs. {{ station.liveSummary.minPrice }}/kWh</span>
+      <!-- Filter Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Search</h3>
+          <div class="input-wrap">
+            <span class="input-icon">🔍</span>
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="City or station name..."
+              @input="applyFilters"
+            />
           </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Near Me</h3>
+          <button class="locate-btn" @click="locateMe" :disabled="locating">
+            {{ locating ? '📍 Locating...' : '📍 Use My Location' }}
+          </button>
+          <div v-if="userLocation" class="location-info">
+            <span>✓ Location detected</span>
+            <label>
+              Radius:
+              <select v-model.number="radius" @change="loadNearby">
+                <option :value="5">5 km</option>
+                <option :value="10">10 km</option>
+                <option :value="25">25 km</option>
+                <option :value="50">50 km</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Connector Type</h3>
+          <div class="check-group">
+            <label v-for="c in connectorOptions" :key="c" class="check-item">
+              <input type="checkbox" :value="c" v-model="selectedConnectors" @change="applyFilters" />
+              <span>{{ c }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Availability</h3>
+          <div class="radio-group">
+            <label class="radio-item">
+              <input type="radio" v-model="availFilter" value="" @change="applyFilters" />
+              <span>All Stations</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" v-model="availFilter" value="available" @change="applyFilters" />
+              <span>Available Only</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" v-model="availFilter" value="busy" @change="applyFilters" />
+              <span>Busy</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Min Power (kW)</h3>
+          <input
+            v-model.number="minPower"
+            type="range"
+            min="0"
+            max="150"
+            step="10"
+            @input="applyFilters"
+            class="range-slider"
+          />
+          <div class="range-label">{{ minPower > 0 ? `${minPower}+ kW` : 'Any power' }}</div>
+        </div>
+
+        <button class="reset-btn" @click="resetFilters">Reset Filters</button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- Status bar -->
+        <div class="status-bar">
+          <span>{{ filteredStations.length }} station{{ filteredStations.length !== 1 ? 's' : '' }} found</span>
           <div class="live-indicator">
             <span class="pulse"></span> Live
           </div>
-          <div class="actions">
-            <RouterLink :to="`/stations/${station._id}`" class="details-btn">View & Book</RouterLink>
-            <button class="direction-btn" @click="openDirections(station)">Get Directions</button>
+        </div>
+
+        <div v-if="loading" class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading stations...</p>
+        </div>
+
+        <div v-else-if="error" class="error-state">
+          <span>⚠️</span>
+          <p>{{ error }}</p>
+          <button @click="loadStations">Try Again</button>
+        </div>
+
+        <div v-else-if="filteredStations.length === 0" class="empty-state">
+          <span class="empty-icon">🔍</span>
+          <p>No stations match your filters.</p>
+          <button @click="resetFilters">Clear Filters</button>
+        </div>
+
+        <div v-else class="station-grid">
+          <div
+            v-for="station in filteredStations"
+            :key="station._id"
+            class="station-card"
+          >
+            <div class="card-header">
+              <div class="status-badge" :class="station.liveSummary?.status || 'offline'">
+                <span class="status-dot"></span>
+                {{ statusLabel(station.liveSummary?.status) }}
+              </div>
+              <div class="card-rating" v-if="station.avgRating > 0">
+                ⭐ {{ station.avgRating }}
+              </div>
+            </div>
+
+            <h2 class="card-name">{{ station.name }}</h2>
+            <p class="card-location">📍 {{ station.address?.formatted || station.address?.city }}</p>
+
+            <div class="card-stats">
+              <div class="stat-item">
+                <strong>{{ station.liveSummary?.available || 0 }}/{{ station.liveSummary?.totalPorts || 0 }}</strong>
+                <span>Ports Free</span>
+              </div>
+              <div class="stat-item" v-if="station.liveSummary?.maxPower">
+                <strong>{{ station.liveSummary.maxPower }} kW</strong>
+                <span>Max Power</span>
+              </div>
+              <div class="stat-item" v-if="station.liveSummary?.minPrice">
+                <strong>Rs.{{ station.liveSummary.minPrice }}</strong>
+                <span>From/kWh</span>
+              </div>
+            </div>
+
+            <div class="connector-tags" v-if="station.liveSummary?.connectors?.length">
+              <span
+                v-for="c in station.liveSummary.connectors"
+                :key="c"
+                class="connector-tag"
+              >{{ c }}</span>
+            </div>
+
+            <div class="card-24h" v-if="station.is24Hours">
+              <span>🕐 Open 24 Hours</span>
+            </div>
+
+            <div class="card-actions">
+              <RouterLink :to="`/stations/${station._id}`" class="view-btn">
+                View Details
+              </RouterLink>
+              <button class="directions-btn" @click="openDirections(station)">
+                🧭 Directions
+              </button>
+            </div>
           </div>
         </div>
-        <div v-if="filteredStations.length === 0" class="no-result">No stations found.</div>
-      </div>
+
+      </main>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { fetchStations } from '../services/stations.js'
+import { fetchStations, fetchNearbyStations } from '../services/stations.js'
 
 const stations = ref([])
 const loading = ref(true)
 const error = ref('')
 const searchQuery = ref('')
-const connectorType = ref('')
+const selectedConnectors = ref([])
+const availFilter = ref('')
 const minPower = ref(0)
-const availability = ref('')
+const userLocation = ref(null)
+const locating = ref(false)
+const radius = ref(25)
+
 let pollTimer = null
+
+const connectorOptions = ['CCS', 'Type2', 'GBT', 'CHAdeMO', 'J1772', 'Tesla']
 
 const loadStations = async () => {
   try {
     error.value = ''
-    const data = await fetchStations({ limit: 50, status: 'active' })
+    const data = await fetchStations({ limit: 100, status: 'active' })
     stations.value = data.stations || []
   } catch (err) {
     error.value = err.response?.data?.message || 'Failed to load stations'
@@ -94,27 +209,77 @@ const loadStations = async () => {
   }
 }
 
+const loadNearby = async () => {
+  if (!userLocation.value) return
+  loading.value = true
+  try {
+    const data = await fetchNearbyStations(
+      userLocation.value.lat,
+      userLocation.value.lng,
+      radius.value
+    )
+    stations.value = Array.isArray(data) ? data : (data.stations || [])
+  } catch (err) {
+    error.value = 'Failed to fetch nearby stations'
+  } finally {
+    loading.value = false
+  }
+}
+
+const locateMe = () => {
+  if (!navigator.geolocation) {
+    error.value = 'Geolocation not supported by your browser'
+    return
+  }
+  locating.value = true
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      userLocation.value = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+      locating.value = false
+      loadNearby()
+    },
+    () => {
+      locating.value = false
+      error.value = 'Could not get your location. Please allow location access.'
+    }
+  )
+}
+
+const filteredStations = computed(() => {
+  return stations.value.filter(s => {
+    const q = searchQuery.value.toLowerCase()
+    const matchSearch = !q ||
+      s.name?.toLowerCase().includes(q) ||
+      s.address?.city?.toLowerCase().includes(q) ||
+      s.address?.formatted?.toLowerCase().includes(q)
+
+    const matchConnector =
+      selectedConnectors.value.length === 0 ||
+      selectedConnectors.value.some(c => s.liveSummary?.connectors?.includes(c))
+
+    const matchPower = (s.liveSummary?.maxPower || 0) >= minPower.value
+
+    const matchAvail =
+      !availFilter.value || s.liveSummary?.status === availFilter.value
+
+    return matchSearch && matchConnector && matchPower && matchAvail
+  })
+})
+
+const applyFilters = () => { /* reactivity handles it via computed */ }
+
+const resetFilters = () => {
+  searchQuery.value = ''
+  selectedConnectors.value = []
+  availFilter.value = ''
+  minPower.value = 0
+}
+
 const statusLabel = (s) => {
   if (s === 'available') return 'Available'
   if (s === 'busy') return 'Busy'
   return 'Offline'
 }
-
-const filteredStations = computed(() =>
-  stations.value.filter((s) => {
-    const q = searchQuery.value.toLowerCase()
-    const matchesSearch =
-      !q ||
-      s.name?.toLowerCase().includes(q) ||
-      s.address?.city?.toLowerCase().includes(q)
-    const matchesConnector =
-      !connectorType.value || s.liveSummary?.connectors?.includes(connectorType.value)
-    const matchesPower = (s.liveSummary?.maxPower || 0) >= minPower.value
-    const matchesAvail =
-      !availability.value || s.liveSummary?.status === availability.value
-    return matchesSearch && matchesConnector && matchesPower && matchesAvail
-  })
-)
 
 const openDirections = (station) => {
   const [lon, lat] = station.location?.coordinates || []
@@ -132,53 +297,432 @@ onUnmounted(() => clearInterval(pollTimer))
 </script>
 
 <style scoped>
-.station-page { min-height: 100vh; background: whitesmoke; padding: 40px; }
-.page-header h1 { font-size: 36px; margin-bottom: 10px; color: #111; }
-.page-header p { color: #555; }
-.loading, .error-msg { padding: 40px; text-align: center; color: #333; }
-.error-msg { color: #c33; }
-.station-container { display: grid; grid-template-columns: 300px 1fr; gap: 25px; margin-top: 30px; }
-.filter-panel { background: #063c33; padding: 25px; border-radius: 16px; color: white; }
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; margin-bottom: 8px; font-size: 14px; }
-.form-group input, .form-group select {
-  width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #0f6454;
-  background: #08493e; color: white;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.find-page {
+  min-height: calc(100vh - 65px);
+  background: #0a0e1a;
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
 }
-.filter-btn {
-  width: 100%; padding: 14px; border: none; border-radius: 10px;
-  background: #18d39e; color: #00231d; font-weight: 700; cursor: pointer;
+
+.page-header {
+  padding: 40px 60px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.station-list { display: flex; flex-direction: column; gap: 20px; }
-.station-card {
-  position: relative; background: #063c33; padding: 25px; border-radius: 16px;
-  border: 1px solid #0f6454; color: white;
+
+.page-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
 }
-.location { color: #b8ccc7; margin-bottom: 15px; }
-.info-tags { display: flex; gap: 10px; flex-wrap: wrap; }
-.info-tags span { background: #08493e; padding: 8px 12px; border-radius: 8px; font-size: 13px; }
-.live-indicator { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; color: #18d39e; }
+
+.page-header p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Layout */
+.find-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 145px);
+}
+
+/* Sidebar */
+.sidebar {
+  background: #0d1323;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 20px;
+  overflow-y: auto;
+  position: sticky;
+  top: 65px;
+  height: calc(100vh - 65px);
+}
+
+.sidebar-section {
+  margin-bottom: 28px;
+}
+
+.sidebar-section h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+
+.input-wrap input {
+  width: 100%;
+  padding: 10px 10px 10px 32px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-wrap input:focus { border-color: #00e59d; }
+
+.locate-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 229, 157, 0.12);
+  border: 1px solid rgba(0, 229, 157, 0.3);
+  border-radius: 8px;
+  color: #00e59d;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.locate-btn:hover:not(:disabled) {
+  background: rgba(0, 229, 157, 0.2);
+}
+
+.locate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.location-info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #00e59d;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-info label {
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-info select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: #f1f5f9;
+  padding: 4px 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+.check-group, .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.check-item, .radio-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #94a3b8;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.check-item:hover, .radio-item:hover { background: rgba(255,255,255,0.04); }
+
+.check-item input, .radio-item input {
+  accent-color: #00e59d;
+  width: 14px;
+  height: 14px;
+}
+
+.range-slider {
+  width: 100%;
+  accent-color: #00e59d;
+  cursor: pointer;
+}
+
+.range-label {
+  font-size: 12px;
+  color: #00e59d;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.reset-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.reset-btn:hover { background: rgba(239, 68, 68, 0.2); }
+
+/* Main */
+.main-content {
+  padding: 24px 32px;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #00e59d;
+  font-weight: 600;
+}
+
 .pulse {
-  width: 8px; height: 8px; border-radius: 50%; background: #18d39e;
-  animation: pulse 1.5s infinite;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00e59d;
+  animation: pulse-anim 1.5s infinite;
 }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-.actions { margin-top: 20px; display: flex; gap: 12px; }
-.details-btn {
-  background: #18d39e; color: #00231d; padding: 12px 18px; border-radius: 8px;
-  font-weight: bold; text-decoration: none; display: inline-block;
+
+@keyframes pulse-anim {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
-.direction-btn {
-  background: transparent; color: white; border: 1px solid #18d39e;
-  padding: 12px 18px; border-radius: 8px; cursor: pointer;
+
+/* States */
+.loading-state, .error-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+  gap: 16px;
+  color: #64748b;
 }
-.status {
-  position: absolute; top: 20px; right: 20px; padding: 6px 14px;
-  border-radius: 20px; font-size: 13px; font-weight: 600;
+
+.error-state { color: #fca5a5; }
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #00e59d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
-.available { background: rgba(24,211,158,0.2); color: #18d39e; }
-.busy { background: rgba(255,99,71,0.2); color: tomato; }
-.offline { background: rgba(150,150,150,0.2); color: #aaa; }
-.no-result { text-align: center; padding: 30px; background: #063c33; border-radius: 12px; color: white; }
-@media (max-width: 768px) { .station-container { grid-template-columns: 1fr; } }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-icon { font-size: 48px; }
+
+.error-state button, .empty-state button {
+  padding: 10px 20px;
+  background: rgba(0,229,157,0.12);
+  border: 1px solid rgba(0,229,157,0.3);
+  border-radius: 8px;
+  color: #00e59d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Grid */
+.station-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.station-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 22px;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.station-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(0, 229, 157, 0.25);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.available {
+  background: rgba(0, 229, 157, 0.15);
+  color: #00e59d;
+}
+
+.status-badge.busy {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.status-badge.offline {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-anim 2s infinite;
+}
+
+.status-badge.offline .status-dot { animation: none; }
+
+.card-rating {
+  font-size: 13px;
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.card-name {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.card-location {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.card-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-item strong {
+  font-size: 17px;
+  font-weight: 700;
+  color: #00e59d;
+}
+
+.stat-item span {
+  font-size: 11px;
+  color: #475569;
+}
+
+.connector-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.connector-tag {
+  background: rgba(124, 58, 237, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.card-24h {
+  font-size: 12px;
+  color: #00e59d;
+  font-weight: 500;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.view-btn {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, #00e59d, #00b4a0);
+  color: #0a1a0e;
+  text-decoration: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.view-btn:hover { opacity: 0.9; }
+
+.directions-btn {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 9px;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.directions-btn:hover { border-color: rgba(255,255,255,0.25); color: #f1f5f9; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .find-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; }
+  .page-header { padding: 24px 20px 16px; }
+  .main-content { padding: 16px 20px; }
+}
+
+@media (max-width: 600px) {
+  .station-grid { grid-template-columns: 1fr; }
+}
 </style>

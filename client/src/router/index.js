@@ -8,7 +8,6 @@ import AdminDashboard from '../views/AdminDashboard.vue'
 import FindStation from '../views/FindStation.vue'
 import About from '../views/About.vue'
 import StationDetail from '../views/StationDetail.vue'
-import PaymentCheckout from '../views/PaymentCheckout.vue'
 
 const routes = [
   {
@@ -32,11 +31,7 @@ const routes = [
     component: StationDetail
   },
   {
-    path: '/payment/:bookingId',
-    name: 'PaymentCheckout',
-    component: PaymentCheckout,
-    meta: { requiresAuth: true, role: 'user' }
-  },
+    path: '/user-auth',
     name: 'UserAuth',
     component: UserAuth
   },
@@ -67,7 +62,10 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior() {
+    return { top: 0 }
+  }
 })
 
 const getStoredUser = () => {
