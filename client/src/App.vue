@@ -24,6 +24,22 @@
             <div class="user-avatar">{{ authUser.name?.[0]?.toUpperCase() }}</div>
             <span class="user-name">{{ authUser.name?.split(' ')[0] }}</span>
             <span class="chevron" :class="{ open: menuOpen }">▾</span>
+      <!-- Login Buttons -->
+      <div class="auth-buttons">
+
+        <!-- EV User Login -->
+        <RouterLink to="/user-auth" class="btn-link">
+  <button class="login-btn">
+    🚗 EV User
+  </button>
+</RouterLink>
+
+        <!-- Station Owner Login -->
+        <RouterLink to="/station-login" class="btn-link">
+          <button class="login-btn">
+           🔌 Station Owner
+          </button>
+        </RouterLink>
 
             <div class="dropdown" v-if="menuOpen">
               <RouterLink :to="dashboardPath" @click="menuOpen = false">Dashboard</RouterLink>
