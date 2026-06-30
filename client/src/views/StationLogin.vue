@@ -4,7 +4,7 @@
 
       <!-- Left Side -->
       <div class="login-info">
-        <div class="logo">⚡ ChargeNP</div>
+        <div class="logo">ChargeNP</div>
 
         <div class="portal-badge">
           EV Charging Management System
@@ -46,12 +46,22 @@
           </button>
         </div>
 
+        <!-- ERROR MESSAGE -->
+        <div v-if="errorMessage" class="alert alert-error">
+          {{ errorMessage }}
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div v-if="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+
         <!-- LOGIN FORM -->
         <form
           v-if="activeTab === 'login'"
           @submit.prevent="loginOwner"
         >
-          <h2>Welcome Back 👋</h2>
+          <h2>Welcome Back</h2>
 
           <p class="subtitle">
             Login to access your station dashboard.
@@ -64,6 +74,7 @@
               type="email"
               placeholder="owner@example.com"
               required
+              :disabled="loading"
             />
           </div>
 
@@ -76,13 +87,14 @@
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="Enter Password"
                 required
+                :disabled="loading"
               />
 
               <span
                 class="toggle-password"
                 @click="showPassword = !showPassword"
               >
-                {{ showPassword ? '🙈' : '👁️' }}
+                {{ showPassword ? 'Hide' : 'Show' }}
               </span>
             </div>
           </div>
@@ -92,6 +104,7 @@
               <input
                 type="checkbox"
                 v-model="login.remember"
+                :disabled="loading"
               />
               Remember Me
             </label>
@@ -99,8 +112,12 @@
             <a href="#">Forgot Password?</a>
           </div>
 
-          <button type="submit" class="login-btn">
-            Login
+          <button 
+            type="submit" 
+            class="login-btn"
+            :disabled="loading"
+          >
+            {{ loading ? 'Logging in...' : 'Login' }}
           </button>
         </form>
 
@@ -124,6 +141,7 @@
                 type="text"
                 placeholder="Full Name"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -134,6 +152,7 @@
                 type="text"
                 placeholder="Business Name"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -144,6 +163,7 @@
                 type="email"
                 placeholder="example@gmail.com"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -154,6 +174,7 @@
                 type="text"
                 placeholder="+977 98XXXXXXXX"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -164,6 +185,7 @@
                 type="text"
                 placeholder="Pokhara, Nepal"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -172,8 +194,9 @@
               <input
                 v-model="signup.password"
                 type="password"
-                placeholder="Create Password"
+                placeholder="Create Password (Min 6 chars, 1 uppercase, 1 number)"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -184,6 +207,7 @@
                 type="password"
                 placeholder="Confirm Password"
                 required
+                :disabled="loading"
               />
             </div>
 
@@ -193,6 +217,7 @@
             <input
               type="checkbox"
               v-model="signup.agree"
+              :disabled="loading"
             />
 
             <span>
@@ -200,8 +225,12 @@
             </span>
           </div>
 
-          <button type="submit" class="login-btn">
-            Create Account
+          <button 
+            type="submit" 
+            class="login-btn"
+            :disabled="loading"
+          >
+            {{ loading ? 'Creating Account...' : 'Create Account' }}
           </button>
 
         </form>
@@ -213,9 +242,18 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import api from "../services/api.js";
+import { validateLogin, validateStationSignup } from "../utils/validation.js";
+import { setUser } from "../services/auth.js";
+
+const router = useRouter();
 
 const activeTab = ref("login");
 const showPassword = ref(false);
+const loading = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
 
 const login = ref({
   email: "",
@@ -234,27 +272,89 @@ const signup = ref({
   agree: false
 });
 
-const loginOwner = () => {
-  console.log("Login Data:", login.value);
+const loginOwner = async () => {
+  try {
+    errorMessage.value = "";
+    successMessage.value = "";
 
-  // Example:
-  // router.push('/owner-dashboard')
+    // Frontend validation
+    const validation = validateLogin(login.value.email, login.value.password);
+    if (!validation.valid) {
+      errorMessage.value = validation.errors[0];
+      return;
+    }
+
+    loading.value = true;
+
+    const response = await api.post("/account/login", {
+      email: login.value.email,
+      password: login.value.password
+    });
+
+    if (response.data.success) {
+      const user = response.data.data.user
+
+      if (user.role !== 'station_owner') {
+        errorMessage.value = 'Please use the EV User portal to log in.'
+        return
+      }
+
+      setUser(user, response.data.data.token)
+
+      successMessage.value = "Login successful! Redirecting..."
+
+      setTimeout(() => {
+        router.push("/station/dashboard")
+      }, 1000)
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    errorMessage.value = err.response?.data?.message || "Login failed. Please try again.";
+  } finally {
+    loading.value = false;
+  }
 };
 
-const registerOwner = () => {
-  if (signup.value.password !== signup.value.confirmPassword) {
-    alert("Passwords do not match");
-    return;
+const registerOwner = async () => {
+  try {
+    errorMessage.value = "";
+    successMessage.value = "";
+
+    // Frontend validation
+    const validation = validateStationSignup(signup.value);
+    if (!validation.valid) {
+      errorMessage.value = validation.errors[0];
+      return;
+    }
+
+    loading.value = true;
+
+    const response = await api.post("/account/register", {
+      name: signup.value.fullName,
+      businessName: signup.value.businessName,
+      email: signup.value.email,
+      phone: signup.value.phone,
+      location: signup.value.stationLocation,
+      password: signup.value.password,
+      role: "station_owner"
+    });
+
+    if (response.data.success) {
+      const { user, token } = response.data.data
+      setUser(user, token)
+      
+      successMessage.value = "Account created successfully! Redirecting...";
+      
+      setTimeout(() => {
+        router.push("/station/dashboard")
+      }, 1500);
+    }
+  } catch (err) {
+    console.error("Registration error:", err);
+    errorMessage.value = err.response?.data?.message || "Registration failed. Please try again.";
+  } finally {
+    loading.value = false;
   }
-
-  if (!signup.value.agree) {
-    alert("Please accept Terms & Conditions");
-    return;
-  }
-
-  console.log("Signup Data:", signup.value);
-
-  // API Call Here
 };
 </script>
 
@@ -357,6 +457,26 @@ const registerOwner = () => {
   color: white;
 }
 
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-error {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.alert-success {
+  background: #efe;
+  color: #3c3;
+  border: 1px solid #cfc;
+}
+
 .subtitle {
   color: #6b7280;
   margin-bottom: 25px;
@@ -370,6 +490,7 @@ const registerOwner = () => {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .input-group input {
@@ -379,11 +500,17 @@ const registerOwner = () => {
   border-radius: 10px;
   outline: none;
   transition: .3s;
+  font-size: 14px;
 }
 
 .input-group input:focus {
   border-color: #00c17c;
   box-shadow: 0 0 0 4px rgba(0,193,124,.15);
+}
+
+.input-group input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
 }
 
 .password-box {
@@ -423,6 +550,7 @@ const registerOwner = () => {
   display: flex;
   gap: 10px;
   margin: 15px 0 25px;
+  font-size: 14px;
 }
 
 .login-btn {
@@ -438,9 +566,15 @@ const registerOwner = () => {
   transition: .3s;
 }
 
-.login-btn:hover {
+.login-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   background: #009d66;
+}
+
+.login-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media(max-width:900px) {

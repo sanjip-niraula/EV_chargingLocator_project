@@ -2,7 +2,7 @@ import express from "express";
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
-import { userRoutes } from "#routes/index";
+import { userRoutes, usersRoutes, stationRoutes, chargerRoutes, reviewRoutes } from "#routes/index";
 import errorMiddleware from "#middleware/errorMiddleware";
 
 const app = express();
@@ -11,11 +11,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_URL || '*', credentials: true }));
 app.use(morgan('dev'));
 
 // Routes
 app.use('/api/account', userRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/stations', stationRoutes);
+app.use('/api/chargers', chargerRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

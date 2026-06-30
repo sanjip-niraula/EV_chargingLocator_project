@@ -1,4 +1,4 @@
- import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const amenitySchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -30,7 +30,7 @@ const evStationSchema = new mongoose.Schema(
       street: { type: String, required: true },
       city: { type: String, required: true },
       state: { type: String },
-      country: { type: String, required: true },
+      country: { type: String, required: true, default: 'Nepal' },
       zipCode: { type: String },
       formatted: { type: String },
     },
@@ -66,4 +66,4 @@ evStationSchema.index({ name: 'text', 'address.city': 'text', 'address.formatted
 evStationSchema.index({ status: 1 });
 evStationSchema.index({ operator: 1 });
 
-module.exports = mongoose.model('EvStation', evStationSchema);
+export const EvStation = mongoose.model('EvStation', evStationSchema);

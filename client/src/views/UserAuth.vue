@@ -1,488 +1,400 @@
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const activeTab = ref('login')
-const showPassword = ref(false)
-
-const loginData = ref({
-  email: '',
-  password: '',
-  remember: false
-})
-
-const signupData = ref({
-  fullName: '',
-  email: '',
-  phone: '',
-  vehicleType: '',
-  password: '',
-  confirmPassword: '',
-  agree: false
-})
-
-const login = () => {
-  localStorage.setItem('userAuth', 'true')
-  router.push('/user/dashboard')
-}
-
-const register = () => {
-  if (signupData.value.password !== signupData.value.confirmPassword) {
-    alert('Passwords do not match')
-    return
-  }
-
-  if (!signupData.value.agree) {
-    alert('Please accept Terms & Conditions')
-    return
-  }
-
-  alert('Account Created Successfully!')
-  activeTab.value = 'login'
-}
-</script>
-
 <template>
   <div class="auth-page">
-
     <div class="auth-card">
 
-      <!-- LEFT PANEL -->
-      <div class="auth-left">
-
-        <div class="logo">
-          ⚡ ChargeNP
+      <!-- Left Side (Visual/Branding) -->
+      <div class="auth-visual">
+        <div class="visual-glow"></div>
+        <div class="logo">ChargeNP</div>
+        <h1>Power up your journey</h1>
+        <p>Join the thousands of EV drivers across Nepal finding Chargers in real-time. Fast, reliable, and always up to date.</p>
+        
+        <div class="info-badges">
+          <div class="badge">100+ Stations</div>
+          <div class="badge">Real-time Live Status</div>
+          <div class="badge">Trusted Reviews</div>
         </div>
 
-        <div class="portal-badge">
-          EV User Portal
+        <div class="visual-footer">
+          Are you a station owner? 
+          <RouterLink to="/station-login">Go to Owner Portal</RouterLink>
         </div>
-
-        <h1>Drive Electric. Charge Smart.</h1>
-
-        <p>
-          Find charging stations, book charging slots,
-          monitor charging sessions and manage your EV
-          journey from one platform.
-        </p>
-
-        <div class="features">
-          <div>✓ Find Nearby Stations</div>
-          <div>✓ Live Availability</div>
-          
-        </div>
-
       </div>
 
-      <!-- RIGHT PANEL -->
-      <div class="auth-right">
-
-        <div class="tabs">
-
-          <button
-            :class="{ active: activeTab === 'login' }"
-            @click="activeTab = 'login'"
-            type="button"
-          >
-            Login
-          </button>
-
-          <button
-            :class="{ active: activeTab === 'signup' }"
-            @click="activeTab = 'signup'"
-            type="button"
-          >
-            Sign Up
-          </button>
-
+      <!-- Right Side (Form) -->
+      <div class="auth-form">
+        <div class="form-tabs">
+          <button 
+            :class="{ active: mode === 'login' }" 
+            @click="mode = 'login'"
+          >Login</button>
+          <button 
+            :class="{ active: mode === 'signup' }" 
+            @click="mode = 'signup'"
+          >Sign Up</button>
         </div>
 
-        <!-- LOGIN -->
-        <form
-          v-if="activeTab === 'login'"
-          @submit.prevent="login"
-        >
-          <h2>Welcome Back 👋</h2>
+        <div v-if="error" class="alert alert-error">{{ error }}</div>
+        <div v-if="success" class="alert alert-success">{{ success }}</div>
 
-          <p class="subtitle">
-            Login to access your ChargeNP account.
+        <form @submit.prevent="handleSubmit">
+          <h2 class="form-title">{{ mode === 'login' ? 'Welcome back' : 'Create account' }}</h2>
+          <p class="form-subtitle">
+            {{ mode === 'login' ? 'Enter your details to access your profile.' : 'Join the community of EV drivers in Nepal.' }}
           </p>
+
+          <div v-if="mode === 'signup'" class="input-group">
+            <label>Full Name</label>
+            <input v-model="form.name" type="text" placeholder="John Doe" required />
+          </div>
 
           <div class="input-group">
             <label>Email Address</label>
-
-            <input
-              type="email"
-              v-model="loginData.email"
-              placeholder="Enter email"
-              required
-            />
+            <input v-model="form.email" type="email" placeholder="john@example.com" required />
           </div>
 
           <div class="input-group">
             <label>Password</label>
-
-            <div class="password-box">
-
-              <input
-                :type="showPassword ? 'text' : 'password'"
-                v-model="loginData.password"
-                placeholder="Enter password"
-                required
-              />
-
-              <span
-                class="toggle-password"
-                @click="showPassword = !showPassword"
-              >
-                {{ showPassword ? '🙈' : '👁️' }}
-              </span>
-
-            </div>
+            <input v-model="form.password" type="password" placeholder="••••••••" required />
           </div>
 
-          <div class="options">
-
-            <label>
-              <input
-                type="checkbox"
-                v-model="loginData.remember"
-              />
-              Remember Me
-            </label>
-
-            <a href="#">
-              Forgot Password?
-            </a>
-
+          <div v-if="mode === 'signup'" class="input-group">
+            <label>Vehicle Type</label>
+            <select v-model="form.vehicleType">
+              <option value="Car">Electric Car</option>
+              <option value="Scooter">Electric Scooter / Bike</option>
+              <option value="Bus">Electric Bus / Van</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
-          <button
-            type="submit"
-            class="auth-btn"
-          >
-            Login
+          <button class="submit-btn" :disabled="loading">
+            {{ loading ? 'Processing...' : (mode === 'login' ? 'Login' : 'Create Account') }}
           </button>
-
-        </form>
-
-        <!-- SIGNUP -->
-        <form
-          v-else
-          @submit.prevent="register"
-        >
-
-          <h2>Create Account</h2>
-
-          <p class="subtitle">
-            Register as an EV User.
-          </p>
-
-          <div class="signup-grid">
-
-            <div class="input-group">
-              <label>Full Name</label>
-
-              <input
-                type="text"
-                v-model="signupData.fullName"
-                placeholder="Full Name"
-                required
-              />
-            </div>
-
-            <div class="input-group">
-              <label>Email Address</label>
-
-              <input
-                type="email"
-                v-model="signupData.email"
-                placeholder="example@gmail.com"
-                required
-              />
-            </div>
-
-            <div class="input-group">
-              <label>Phone Number</label>
-
-              <input
-                type="text"
-                v-model="signupData.phone"
-                placeholder="+977 98XXXXXXXX"
-                required
-              />
-            </div>
-
-            <div class="input-group">
-              <label>Vehicle Type</label>
-
-              <select
-                v-model="signupData.vehicleType"
-                required
-              >
-                <option value="">
-                  Select Vehicle
-                </option>
-
-                <option>Electric Car</option>
-                <option>Electric Bike</option>
-                <option>Electric Scooter</option>
-
-              </select>
-            </div>
-
-            <div class="input-group">
-              <label>Password</label>
-
-              <input
-                type="password"
-                v-model="signupData.password"
-                placeholder="Create Password"
-                required
-              />
-            </div>
-
-            <div class="input-group">
-              <label>Confirm Password</label>
-
-              <input
-                type="password"
-                v-model="signupData.confirmPassword"
-                placeholder="Confirm Password"
-                required
-              />
-            </div>
-
+          
+          <div class="switch-mode">
+            {{ mode === 'login' ? "Don't have an account?" : "Already have an account?" }}
+            <button type="button" @click="mode = mode === 'login' ? 'signup' : 'login'">
+              {{ mode === 'login' ? 'Sign up here' : 'Login here' }}
+            </button>
           </div>
-
-          <div class="terms">
-
-            <input
-              type="checkbox"
-              v-model="signupData.agree"
-            />
-
-            <span>
-              I agree to the Terms & Conditions
-            </span>
-
-          </div>
-
-          <button
-            type="submit"
-            class="auth-btn"
-          >
-            Create Account
-          </button>
-
         </form>
-
       </div>
 
     </div>
-
   </div>
 </template>
 
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '../services/api.js'
+import { setUser } from '../services/auth.js'
+
+const router = useRouter()
+const mode = ref('login')
+const loading = ref(false)
+const error = ref('')
+const success = ref('')
+
+const form = ref({
+  name: '',
+  email: '',
+  password: '',
+  vehicleType: 'Car'
+})
+
+const handleSubmit = async () => {
+  error.value = ''
+  success.value = ''
+  loading.value = true
+
+  try {
+    if (mode.value === 'login') {
+      const res = await api.post('/account/login', {
+        email: form.value.email,
+        password: form.value.password
+      })
+      
+      const { user, token } = res.data.data
+      
+      // SECURITY: Ensure only 'user' role can login here
+      if (user.role !== 'user') {
+        error.value = 'Please use the Station Owner portal to log in.'
+        return
+      }
+
+      setUser(user, token)
+      router.push('/user/dashboard')
+    } else {
+      const res = await api.post('/account/register', {
+        name: form.value.name,
+        email: form.value.email,
+        password: form.value.password,
+        vehicleType: form.value.vehicleType,
+        role: 'user'
+      })
+      
+      const { user, token } = res.data.data
+      setUser(user, token)
+      
+      success.value = 'Account created successfully! Redirecting...'
+      setTimeout(() => {
+        router.push('/user/dashboard')
+      }, 1500)
+    }
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Something went wrong. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
 <style scoped>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.auth-page {
+  min-height: calc(100vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #0a0e1a;
+  font-family: 'Inter', sans-serif;
 }
 
-.auth-page{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:30px;
-  background:linear-gradient(
-    135deg,
-    #022c22,
-    #063d33,
-    #021f1b
-  );
+.auth-card {
+  width: 1000px;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  background: #111827;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
 }
 
-.auth-card{
-  width:1150px;
-  max-width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  background:#fff;
-  border-radius:25px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
+/* Visual Side */
+.auth-visual {
+  background: linear-gradient(135deg, #0d212d, #06111a);
+  padding: 60px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.auth-left{
-  padding:60px;
-  background:linear-gradient(
-    135deg,
-    #00c17c,
-    #008f5c
-  );
-  color:white;
+.visual-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 229, 157, 0.1) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.logo{
-  font-size:40px;
-  font-weight:700;
-  margin-bottom:15px;
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #00e59d;
+  margin-bottom: 32px;
 }
 
-.portal-badge{
-  display:inline-block;
-  padding:8px 18px;
-  border-radius:30px;
-  background:rgba(255,255,255,.2);
-  margin-bottom:25px;
+.auth-visual h1 {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
 }
 
-.auth-left h1{
-  font-size:42px;
-  margin-bottom:20px;
+.auth-visual p {
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 40px;
 }
 
-.auth-left p{
-  line-height:1.8;
-  margin-bottom:30px;
+.info-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 60px;
 }
 
-.features{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
+.badge {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
 }
 
-.auth-right{
-  padding:50px;
+.visual-footer {
+  font-size: 14px;
+  color: #64748b;
 }
 
-.tabs{
-  display:flex;
-  margin-bottom:30px;
-  border-radius:12px;
-  overflow:hidden;
-  background:#f3f4f6;
+.visual-footer a {
+  color: #00e59d;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 6px;
 }
 
-.tabs button{
-  flex:1;
-  border:none;
-  padding:15px;
-  cursor:pointer;
-  background:transparent;
-  font-weight:600;
+/* Form Side */
+.auth-form {
+  background: #111827;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
 }
 
-.tabs button.active{
-  background:#00c17c;
-  color:white;
+.form-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 40px;
 }
 
-.subtitle{
-  color:#6b7280;
-  margin-bottom:25px;
+.form-tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 9px;
+  transition: all 0.2s;
 }
 
-.input-group{
-  margin-bottom:18px;
+.form-tabs button.active {
+  background: #00e59d;
+  color: #0a1a0e;
 }
 
-.input-group label{
-  display:block;
-  margin-bottom:8px;
-  font-weight:600;
+.form-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
-.input-group input,
-.input-group select{
-  width:100%;
-  padding:14px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  outline:none;
+.form-subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 32px;
 }
 
-.input-group input:focus,
-.input-group select:focus{
-  border-color:#00c17c;
-  box-shadow:0 0 0 4px rgba(0,193,124,.15);
+.input-group {
+  margin-bottom: 20px;
 }
 
-.password-box{
-  position:relative;
+.input-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
 }
 
-.toggle-password{
-  position:absolute;
-  top:15px;
-  right:15px;
-  cursor:pointer;
+.input-group input, .input-group select {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #f1f5f9;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.options{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:25px;
+.input-group input:focus, .input-group select:focus {
+  border-color: #00e59d;
 }
 
-.options a{
-  text-decoration:none;
-  color:#00c17c;
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #00e59d, #00b4a0);
+  border: none;
+  border-radius: 12px;
+  color: #0a1a0e;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
-.signup-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
+.submit-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
 }
 
-.terms{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin:20px 0;
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.auth-btn{
-  width:100%;
-  border:none;
-  padding:15px;
-  border-radius:10px;
-  background:#00c17c;
-  color:white;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.3s;
+.switch-mode {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #64748b;
 }
 
-.auth-btn:hover{
-  background:#009d66;
-  transform:translateY(-2px);
+.switch-mode button {
+  background: none;
+  border: none;
+  color: #00e59d;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
 }
 
-@media(max-width:900px){
+.alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
 
-  .auth-card{
-    grid-template-columns:1fr;
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.alert-success {
+  background: rgba(0, 229, 157, 0.1);
+  color: #00e59d;
+  border: 1px solid rgba(0, 229, 157, 0.2);
+}
+
+@media (max-width: 900px) {
+  .auth-card {
+    grid-template-columns: 1fr;
   }
-
-  .auth-left{
-    display:none;
+  .auth-visual {
+    padding: 40px;
+    text-align: center;
   }
-
-  .signup-grid{
-    grid-template-columns:1fr;
-  }
-
-  .auth-right{
-    padding:30px;
-  }
+  .auth-visual h1 { font-size: 32px; }
+  .info-badges { display: none; }
+  .auth-form { padding: 40px; }
 }
 </style>
