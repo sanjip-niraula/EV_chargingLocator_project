@@ -3,7 +3,7 @@
 
     <!-- Navbar -->
     <nav class="navbar" :class="{ scrolled: isScrolled }">
-      <RouterLink to="/" class="nav-logo">⚡ ChargeNP</RouterLink>
+      <RouterLink to="/" class="nav-logo">ChargeNP</RouterLink>
 
       <div class="nav-links">
         <RouterLink to="/">Home</RouterLink>
@@ -15,7 +15,7 @@
         <!-- Not logged in -->
         <template v-if="!authUser">
           <RouterLink to="/user-auth" class="nav-btn-ghost">EV User</RouterLink>
-          <RouterLink to="/station-login" class="nav-btn-primary">🔌 Station Owner</RouterLink>
+          <RouterLink to="/station-login" class="nav-btn-primary">Station Owner</RouterLink>
         </template>
 
         <!-- Logged in -->
@@ -64,19 +64,14 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router'
 
+import { user as authUser, clearUser } from './services/auth.js'
+
 const router = useRouter()
 const route = useRoute()
 const isScrolled = ref(false)
 const menuOpen = ref(false)
 const mobileOpen = ref(false)
 const menuRef = ref(null)
-
-const authUser = computed(() => {
-  try {
-    const u = localStorage.getItem('user')
-    return u ? JSON.parse(u) : null
-  } catch { return null }
-})
 
 const dashboardPath = computed(() => {
   const role = authUser.value?.role
@@ -86,8 +81,7 @@ const dashboardPath = computed(() => {
 })
 
 const logout = () => {
-  localStorage.removeItem('authToken')
-  localStorage.removeItem('user')
+  clearUser()
   menuOpen.value = false
   mobileOpen.value = false
   router.push('/')

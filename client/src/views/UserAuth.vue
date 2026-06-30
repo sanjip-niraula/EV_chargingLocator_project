@@ -5,14 +5,14 @@
       <!-- Left Side (Visual/Branding) -->
       <div class="auth-visual">
         <div class="visual-glow"></div>
-        <div class="logo">⚡ ChargeNP</div>
+        <div class="logo">ChargeNP</div>
         <h1>Power up your journey</h1>
         <p>Join the thousands of EV drivers across Nepal finding Chargers in real-time. Fast, reliable, and always up to date.</p>
         
         <div class="info-badges">
-          <div class="badge">📍 100+ Stations</div>
-          <div class="badge">⚡ Real-time Live Status</div>
-          <div class="badge">⭐ Trusted Reviews</div>
+          <div class="badge">100+ Stations</div>
+          <div class="badge">Real-time Live Status</div>
+          <div class="badge">Trusted Reviews</div>
         </div>
 
         <div class="visual-footer">
@@ -89,6 +89,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api.js'
+import { setUser } from '../services/auth.js'
 
 const router = useRouter()
 const mode = ref('login')
@@ -116,20 +117,31 @@ const handleSubmit = async () => {
       })
       
       const { user, token } = res.data.data
-      localStorage.setItem('authToken', token)
-      localStorage.setItem('user', JSON.stringify(user))
       
-      router.push(user.role === 'station_owner' ? '/station/dashboard' : '/user/dashboard')
+      // SECURITY: Ensure only 'user' role can login here
+      if (user.role !== 'user') {
+        error.value = 'Please use the Station Owner portal to log in.'
+        return
+      }
+
+      setUser(user, token)
+      router.push('/user/dashboard')
     } else {
-      await api.post('/account/register', {
+      const res = await api.post('/account/register', {
         name: form.value.name,
         email: form.value.email,
         password: form.value.password,
         vehicleType: form.value.vehicleType,
         role: 'user'
       })
-      success.value = 'Account created successfully! Please login.'
-      mode.value = 'login'
+      
+      const { user, token } = res.data.data
+      setUser(user, token)
+      
+      success.value = 'Account created successfully! Redirecting...'
+      setTimeout(() => {
+        router.push('/user/dashboard')
+      }, 1500)
     }
   } catch (err) {
     error.value = err.response?.data?.message || 'Something went wrong. Please try again.'

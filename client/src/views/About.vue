@@ -18,17 +18,14 @@
     <section class="mission-section">
       <div class="section-grid">
         <div class="card glass">
-          <div class="card-icon">🎯</div>
           <h3>Our Mission</h3>
           <p>To eliminate "range anxiety" from every EV journey in Nepal by providing accurate, real-time data on every charging station across the country.</p>
         </div>
         <div class="card glass">
-          <div class="card-icon">🏗️</div>
           <h3>Built for Nepal</h3>
           <p>We support all major standards—CCS2, GB/T, and Type 2—covering NEA stations as well as private hubs across major highway arteries.</p>
         </div>
         <div class="card glass">
-          <div class="card-icon">🤝</div>
           <h3>For Owners</h3>
           <p>We provide station owners with the digital tools needed to manage their ports, monitor status, and connect with a growing community of drivers.</p>
         </div>
@@ -40,21 +37,18 @@
       <h2 class="section-title">Everything you need on the road</h2>
       <div class="features-list">
         <div class="feature-item">
-          <div class="f-icon">📍</div>
           <div class="f-text">
             <h4>Live Status Map</h4>
             <p>Every district covered. Colour-coded pins update every 15 seconds—green means free, red means occupied.</p>
           </div>
         </div>
         <div class="feature-item">
-          <div class="f-icon">🧭</div>
           <div class="f-text">
             <h4>Seamless Navigation</h4>
             <p>One-tap handoff to Google Maps for turn-by-turn directions. No copy-pasting coordinates required.</p>
           </div>
         </div>
         <div class="feature-item">
-          <div class="f-icon">⭐</div>
           <div class="f-text">
             <h4>Trusted Community</h4>
             <p>Read honest ratings and photos from fellow drivers before you arrive. Know the charger quality upfront.</p>
@@ -77,7 +71,7 @@
 
     <footer class="about-footer">
       <div class="footer-inner">
-        <div class="footer-logo">⚡ ChargeNP</div>
+        <div class="footer-logo">ChargeNP</div>
         <p>© 2026. Built for Nepal’s EV drivers.</p>
       </div>
     </footer>

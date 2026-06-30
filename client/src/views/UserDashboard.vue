@@ -3,7 +3,7 @@
 
     <!-- Sidebar -->
     <aside class="dashboard-sidebar">
-      <div class="brand">⚡ ChargeNP</div>
+      <div class="brand">ChargeNP</div>
       <nav class="nav-menu">
         <button 
           v-for="t in tabs" 
@@ -106,6 +106,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api.js'
 import { fetchStationReviews, deleteReview } from '../services/reviews.js'
+import { clearUser } from '../services/auth.js'
 
 const router = useRouter()
 const activeTab = ref('profile')
@@ -115,8 +116,8 @@ const reviews = ref([])
 const profileMsg = ref(null)
 
 const tabs = [
-  { id: 'profile', label: 'My Profile', icon: '👤' },
-  { id: 'reviews', label: 'My Reviews', icon: '💬' }
+  { id: 'profile', label: 'My Profile', icon: '' },
+  { id: 'reviews', label: 'My Reviews', icon: '' }
 ]
 
 const user = computed(() => {
@@ -170,8 +171,7 @@ const confirmDeleteReview = async (id) => {
 const formatDate = (d) => new Date(d).toLocaleDateString()
 
 const logout = () => {
-  localStorage.removeItem('authToken')
-  localStorage.removeItem('user')
+  clearUser()
   router.push('/')
 }
 

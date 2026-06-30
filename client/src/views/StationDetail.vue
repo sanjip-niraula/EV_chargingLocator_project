@@ -7,9 +7,8 @@
     </div>
 
     <div v-else-if="error" class="state-view error-text">
-      <span>⚠️</span>
-      <p>{{ error }}</p>
-      <RouterLink to="/find" class="back-link">← Back to stations</RouterLink>
+       <p>Error: {{ error }}</p>
+       <RouterLink to="/find" class="back-link">← Back to stations</RouterLink>
     </div>
 
     <template v-else-if="station">
@@ -22,7 +21,7 @@
           <div class="hero-top">
             <div>
               <h1>{{ station.name }}</h1>
-              <p class="hero-address">📍 {{ station.address?.formatted || station.address?.city }}</p>
+              <p class="hero-address">Location: {{ station.address?.formatted || station.address?.city }}</p>
               <p class="hero-desc" v-if="station.description">{{ station.description }}</p>
             </div>
             <div class="hero-meta">
@@ -31,19 +30,19 @@
                 {{ liveStatus.available }}/{{ liveStatus.totalPorts }} ports free
               </div>
               <div class="rating-pill" v-if="station.avgRating > 0">
-                ⭐ {{ station.avgRating }} ({{ station.reviewCount }} reviews)
+                Rating: {{ station.avgRating }} ({{ station.reviewCount }} reviews)
               </div>
               <button class="directions-btn-lg" @click="openDirections">
-                🧭 Get Directions
+                Get Directions
               </button>
             </div>
           </div>
 
           <!-- Quick info row -->
           <div class="info-chips">
-            <span class="chip">{{ station.accessType === 'public' ? '🌍 Public' : station.accessType === 'semi_public' ? '🏢 Semi-Public' : '🔒 Private' }}</span>
-            <span class="chip" v-if="station.is24Hours">🕐 24 Hours</span>
-            <span class="chip" v-if="station.network">🌐 {{ station.network }}</span>
+            <span class="chip">{{ station.accessType === 'public' ? 'Public' : station.accessType === 'semi_public' ? 'Semi-Public' : 'Private' }}</span>
+            <span class="chip" v-if="station.is24Hours">24 Hours</span>
+            <span class="chip" v-if="station.network">Network: {{ station.network }}</span>
             <span class="chip status-chip" :class="station.status">{{ station.status }}</span>
           </div>
         </div>
@@ -83,7 +82,7 @@
 
               <div class="port-pricing" v-if="port.pricing">
                 <template v-if="port.pricing.freeCharging">
-                  <span class="free-tag">🎉 Free Charging</span>
+                  <span class="free-tag">Free Charging</span>
                 </template>
                 <template v-else>
                   <span v-if="port.pricing.perKwh">Rs. {{ port.pricing.perKwh }}/kWh</span>
@@ -105,7 +104,7 @@
 
           <!-- Operating Hours -->
           <div class="sidebar-card" v-if="station.operatingHours?.length || station.is24Hours">
-            <h3>🕐 Operating Hours</h3>
+            <h3>Operating Hours</h3>
             <div v-if="station.is24Hours" class="hours-24">Open 24 hours, 7 days a week</div>
             <div v-else class="hours-list">
               <div
@@ -138,7 +137,7 @@
 
           <!-- Operator -->
           <div class="sidebar-card" v-if="station.operator">
-            <h3>⚡ Station Operator</h3>
+            <h3>Station Operator</h3>
             <div class="operator-info">
               <div class="operator-avatar">{{ station.operator.name?.[0]?.toUpperCase() }}</div>
               <div>
@@ -187,7 +186,7 @@
                 @click="submitReview"
                 :disabled="reviewLoading || !newReview.rating"
               >
-                {{ reviewLoading ? 'Submitting...' : '📝 Submit Review' }}
+                {{ reviewLoading ? 'Submitting...' : 'Submit Review' }}
               </button>
             </div>
           </div>
@@ -210,7 +209,7 @@
               </div>
               <p class="review-comment" v-if="r.comment">{{ r.comment }}</p>
               <div class="review-reply" v-if="r.reply?.text">
-                <div class="reply-label">⚡ Station Response</div>
+                <div class="reply-label">Station Response</div>
                 <p>{{ r.reply.text }}</p>
               </div>
             </div>
@@ -311,8 +310,8 @@ const isToday = (day) => {
 }
 
 const amenityIcon = (cat) => {
-  const map = { cafe: '☕', parking: '🅿️', restroom: '🚻', wifi: '📶', restaurant: '🍽️', hotel: '🏨', shopping: '🛍️' }
-  return map[cat] || '📍'
+  const map = { cafe: 'Cafe', parking: 'Parking', restroom: 'Restroom', wifi: 'Wifi', restaurant: 'Restaurant', hotel: 'Hotel', shopping: 'Shop' }
+  return map[cat] || '·'
 }
 
 const starDisplay = (r) => '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r))

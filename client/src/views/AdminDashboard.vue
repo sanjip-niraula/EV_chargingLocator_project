@@ -3,7 +3,7 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="brand">⚡ Admin Panel</div>
+      <div class="brand">Admin Panel</div>
       <nav class="nav">
         <button 
           v-for="t in tabs" 
@@ -168,9 +168,9 @@ const stations = ref([])
 const allUsers = ref([])
 
 const tabs = [
-  { id: 'overview', label: 'Overview', icon: '📊' },
-  { id: 'stations', label: 'Stations', icon: '🏗️' },
-  { id: 'users', label: 'Users', icon: '👥' }
+  { id: 'overview', label: 'Overview', icon: '' },
+  { id: 'stations', label: 'Stations', icon: '' },
+  { id: 'users', label: 'Users', icon: '' }
 ]
 
 const loadData = async () => {

@@ -14,7 +14,7 @@
         <div class="sidebar-section">
           <h3>Search</h3>
           <div class="input-wrap">
-            <span class="input-icon">🔍</span>
+            <span class="input-icon">Search</span>
             <input
               v-model="searchQuery"
               type="text"
@@ -26,9 +26,7 @@
 
         <div class="sidebar-section">
           <h3>Near Me</h3>
-          <button class="locate-btn" @click="locateMe" :disabled="locating">
-            {{ locating ? '📍 Locating...' : '📍 Use My Location' }}
-          </button>
+            {{ locating ? 'Locating...' : 'Use My Location' }}
           <div v-if="userLocation" class="location-info">
             <span>✓ Location detected</span>
             <label>
@@ -111,7 +109,6 @@
         </div>
 
         <div v-else-if="filteredStations.length === 0" class="empty-state">
-          <span class="empty-icon">🔍</span>
           <p>No stations match your filters.</p>
           <button @click="resetFilters">Clear Filters</button>
         </div>
@@ -128,12 +125,12 @@
                 {{ statusLabel(station.liveSummary?.status) }}
               </div>
               <div class="card-rating" v-if="station.avgRating > 0">
-                ⭐ {{ station.avgRating }}
+                Rating: {{ station.avgRating }}
               </div>
             </div>
 
             <h2 class="card-name">{{ station.name }}</h2>
-            <p class="card-location">📍 {{ station.address?.formatted || station.address?.city }}</p>
+            <p class="card-location">{{ station.address?.formatted || station.address?.city }}</p>
 
             <div class="card-stats">
               <div class="stat-item">
@@ -159,7 +156,7 @@
             </div>
 
             <div class="card-24h" v-if="station.is24Hours">
-              <span>🕐 Open 24 Hours</span>
+              <span>Open 24 Hours</span>
             </div>
 
             <div class="card-actions">
@@ -167,7 +164,7 @@
                 View Details
               </RouterLink>
               <button class="directions-btn" @click="openDirections(station)">
-                🧭 Directions
+                Directions
               </button>
             </div>
           </div>

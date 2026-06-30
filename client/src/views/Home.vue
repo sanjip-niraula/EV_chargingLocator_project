@@ -18,10 +18,10 @@
         </p>
         <div class="hero-actions">
           <RouterLink to="/find" class="btn-primary">
-            <span>⚡</span> Find Stations Now
+            Find Stations Now
           </RouterLink>
           <RouterLink to="/station-login" class="btn-outline">
-            🔌 Add Your Station
+            Add Your Station
           </RouterLink>
         </div>
         <div class="hero-stats">
@@ -47,28 +47,28 @@
         <div class="map-glow"></div>
         <div class="map-card">
           <div class="map-header">
-            <span class="map-title">⚡ Live Station Map</span>
+            <span class="map-title">Live Station Map</span>
             <span class="live-badge"><span class="pulse-dot"></span> Live</span>
           </div>
           <div class="fake-map">
             <div class="map-pin pin-1" title="Kathmandu - 4/5 free">
-              <div class="pin-icon available">⚡</div>
+              <div class="pin-icon available">A</div>
               <div class="pin-label">Kathmandu</div>
             </div>
             <div class="map-pin pin-2" title="Pokhara - 2/3 free">
-              <div class="pin-icon busy">⚡</div>
+              <div class="pin-icon busy">B</div>
               <div class="pin-label">Pokhara</div>
             </div>
             <div class="map-pin pin-3" title="Lalitpur - 3/3 free">
-              <div class="pin-icon available">⚡</div>
+              <div class="pin-icon available">A</div>
               <div class="pin-label">Lalitpur</div>
             </div>
             <div class="map-pin pin-4" title="Bhaktapur - offline">
-              <div class="pin-icon offline">⚡</div>
+              <div class="pin-icon offline">O</div>
               <div class="pin-label">Bhaktapur</div>
             </div>
             <div class="map-pin pin-5" title="Chitwan - 1/2 free">
-              <div class="pin-icon available">⚡</div>
+              <div class="pin-icon available">A</div>
               <div class="pin-label">Chitwan</div>
             </div>
             <div class="map-roads"></div>
@@ -88,32 +88,26 @@
       <h2 class="section-title">Everything an EV driver needs</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🗺️</div>
           <h3>Real-Time Map</h3>
           <p>See all nearby charging stations on an interactive map with live availability status updated every 15 seconds.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⚡</div>
           <h3>Live Availability</h3>
           <p>Know exactly which ports are free before you leave. Filter by connector type (CCS, Type2, GBT, CHAdeMO) and charge speed.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">💰</div>
           <h3>Transparent Pricing</h3>
           <p>View per-kWh and per-minute pricing upfront. Compare stations and find the best rates near you.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🧭</div>
           <h3>One-Tap Navigation</h3>
           <p>Get turn-by-turn directions via Google Maps directly from the station listing. Never get lost again.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⭐</div>
           <h3>User Reviews</h3>
           <p>Read honest ratings and reviews from the EV community. Share your own experience to help fellow drivers.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔌</div>
           <h3>Station Management</h3>
           <p>Station owners get a powerful dashboard to manage ports, update live status, add pricing, and respond to reviews.</p>
         </div>
@@ -127,21 +121,18 @@
       <div class="steps">
         <div class="step">
           <div class="step-number">01</div>
-          <div class="step-icon">📍</div>
           <h3>Find a Station</h3>
           <p>Search by location or browse the map to find the nearest available EV charging station.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-number">02</div>
-          <div class="step-icon">🔍</div>
           <h3>Check Live Status</h3>
           <p>View real-time port availability, connector types, pricing and operating hours.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-number">03</div>
-          <div class="step-icon">🧭</div>
           <h3>Navigate & Charge</h3>
           <p>Tap "Get Directions" to open Google Maps navigation and head to the station to charge.</p>
         </div>
@@ -156,7 +147,7 @@
         <p>Join ChargeNP and get your station listed in minutes. Manage ports, monitor live status, and connect with EV drivers across Nepal.</p>
         <div class="cta-actions">
           <RouterLink to="/station-login" class="btn-primary">
-            🔌 List Your Station — It's Free
+            List Your Station — It's Free
           </RouterLink>
           <RouterLink to="/find" class="btn-ghost">
             Browse Stations →
@@ -168,7 +159,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-brand">
-        <div class="footer-logo">⚡ ChargeNP</div>
+        <div class="footer-logo">ChargeNP</div>
         <p>Built for Nepal's growing EV community.</p>
       </div>
       <div class="footer-links">

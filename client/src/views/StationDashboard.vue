@@ -3,7 +3,7 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar-brand">⚡ ChargeNP</div>
+      <div class="sidebar-brand">ChargeNP</div>
       <nav class="sidebar-nav">
         <button
           v-for="tab in tabs"
@@ -49,22 +49,18 @@
       <div v-if="activeTab === 'overview'" class="tab-content">
         <div class="metrics-grid">
           <div class="metric-card">
-            <div class="metric-icon">🏗️</div>
             <div class="metric-value">{{ stats.stations }}</div>
             <div class="metric-label">My Stations</div>
           </div>
           <div class="metric-card green">
-            <div class="metric-icon">⚡</div>
             <div class="metric-value">{{ stats.available }}/{{ stats.ports }}</div>
             <div class="metric-label">Ports Available</div>
           </div>
           <div class="metric-card">
-            <div class="metric-icon">🔴</div>
             <div class="metric-value">{{ stats.occupied }}</div>
             <div class="metric-label">Currently Occupied</div>
           </div>
           <div class="metric-card">
-            <div class="metric-icon">⭐</div>
             <div class="metric-value">{{ stats.avgRating || '—' }}</div>
             <div class="metric-label">Avg Rating</div>
           </div>
@@ -111,7 +107,7 @@
                 <h3>{{ s.name }}</h3>
                 <span class="sc-status" :class="s.status">{{ s.status }}</span>
               </div>
-              <p class="sc-addr">📍 {{ s.address?.formatted || s.address?.city }}</p>
+              <p class="sc-addr">Address: {{ s.address?.formatted || s.address?.city }}</p>
               <div class="sc-live">
                 <span class="live-dot-sm" :class="s.liveStatus?.available > 0 ? 'available' : 'offline'"></span>
                 {{ s.liveStatus?.available || 0 }}/{{ s.liveStatus?.totalPorts || 0 }} ports free ·
@@ -378,14 +374,15 @@ import {
   updatePortStatus
 } from '../services/stations.js'
 import api from '../services/api.js'
+import { clearUser } from '../services/auth.js'
 
 const router = useRouter()
 
 const tabs = [
-  { id: 'overview', label: 'Overview', icon: '📊' },
-  { id: 'stations', label: 'My Stations', icon: '🏗️' },
-  { id: 'ports', label: 'Charger Ports', icon: '⚡' },
-  { id: 'profile', label: 'Profile', icon: '👤' }
+  { id: 'overview', label: 'Overview', icon: '' },
+  { id: 'stations', label: 'My Stations', icon: '' },
+  { id: 'ports', label: 'Charger Ports', icon: '' },
+  { id: 'profile', label: 'Profile', icon: '' }
 ]
 
 const activeTab = ref('overview')
@@ -585,10 +582,10 @@ const saveProfile = async () => {
 }
 
 const logout = () => {
-  localStorage.removeItem('authToken')
-  localStorage.removeItem('user')
+  clearUser()
   router.push('/station-login')
 }
+
 
 onMounted(async () => {
   await load()

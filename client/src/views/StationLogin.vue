@@ -4,7 +4,7 @@
 
       <!-- Left Side -->
       <div class="login-info">
-        <div class="logo">⚡ ChargeNP</div>
+        <div class="logo">ChargeNP</div>
 
         <div class="portal-badge">
           EV Charging Management System
@@ -61,7 +61,7 @@
           v-if="activeTab === 'login'"
           @submit.prevent="loginOwner"
         >
-          <h2>Welcome Back 👋</h2>
+          <h2>Welcome Back</h2>
 
           <p class="subtitle">
             Login to access your station dashboard.
@@ -94,7 +94,7 @@
                 class="toggle-password"
                 @click="showPassword = !showPassword"
               >
-                {{ showPassword ? '🙈' : '👁️' }}
+                {{ showPassword ? 'Hide' : 'Show' }}
               </span>
             </div>
           </div>
@@ -245,6 +245,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api.js";
 import { validateLogin, validateStationSignup } from "../utils/validation.js";
+import { setUser } from "../services/auth.js";
 
 const router = useRouter();
 
@@ -298,8 +299,7 @@ const loginOwner = async () => {
         return
       }
 
-      localStorage.setItem('authToken', response.data.data.token)
-      localStorage.setItem('user', JSON.stringify(user))
+      setUser(user, response.data.data.token)
 
       successMessage.value = "Login successful! Redirecting..."
 
@@ -340,22 +340,13 @@ const registerOwner = async () => {
     });
 
     if (response.data.success) {
-      successMessage.value = "Account created successfully! Switching to login...";
-
-      // Reset form and switch to login tab
+      const { user, token } = response.data.data
+      setUser(user, token)
+      
+      successMessage.value = "Account created successfully! Redirecting...";
+      
       setTimeout(() => {
-        signup.value = {
-          fullName: "",
-          businessName: "",
-          email: "",
-          phone: "",
-          stationLocation: "",
-          password: "",
-          confirmPassword: "",
-          agree: false
-        };
-        activeTab.value = "login";
-        successMessage.value = "";
+        router.push("/station/dashboard")
       }, 1500);
     }
   } catch (err) {
