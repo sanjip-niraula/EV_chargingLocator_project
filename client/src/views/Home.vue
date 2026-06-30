@@ -1,263 +1,361 @@
 <template>
-  <div class="home">
-  
-    <!-- Hero Section -->
-    <div class="hero">
+    <div class="page">
+                <!-- HERO -->
+        <section class="hero">
+            <div class="left">
+                <div class="badge"> 
+                    ⚡ Powering Nepal's EV Future
+                </div>
+                <h1> Find EV Chargers. <br> Anywhere in
+                    <span> Nepal </span>
+                </h1>
+                <p>
+                    Real-time availability, connector type filters, and one-tap
+                    navigation — built for Nepali EV drivers.
+                </p>
+                <div class="search">
+                    <div class="input">🔍
+                        <span> Search location (e.g. Kathmandu) </span>
+                    </div>
+                    <button> ➤ Find Chargers </button>
+                </div>
+                
+                <!-- CARDS -->
+                 <div class="cards">
+                    <div class="card">
+                        <div class="icon green"> ▥ </div>
+                        <div>
+                            <strong> Live Data </strong><br>
+                            <small> Real-time station availability </small>
+                        </div>
+                    </div>
 
-      <!-- Left Content -->
-      <div class="hero-text">
+                    <div class="card">
+                        <div class="icon yellow"> 🔋 </div>
+                        <div>
+                            <strong> 20+ </strong><br>
+                            <small> Charging Points </small>
+                        </div>
+                    </div>
 
-        <h1>
-          Find EV Chargers.<br />Anywhere in Nepal.
-        </h1>
+                    <div class="card">
+                        <div class="icon green"> 📍 </div>
+                        <div>
+                            <strong> 10+ </strong><br>
+                            <small> Districts Covered </small>
+                        </div>
+                    </div>
 
-        <p>
-          Real-time availability, connector type filters, and one-tap Google
-            Maps navigation — built for Nepali EV drivers.
-        </p>
+                    <div class="card">
+                        <div class="icon blue">🔌</div>
+                        <div>
+                            <strong> 3 </strong><br>
+                            <small> Connector Types </small>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="buttons">
-          <button class="primary">Open the Locator</button>
-          <button class="secondary">About us</button>
-        </div>
-
-        <div class="tags">
-          <span>Live station data</span>
-          <span>20+ Charging points</span>
-          <span>10+Districts covered </span>
-          <span>3 Connector types </span>
-          <span>Free to use</span>
-        </div>
-      </div>
-
-      <!-- Map Section -->
-      <div class="map-card">
-        <iframe
-          src="https://www.openstreetmap.org/export/embed.html"
-          frameborder="0"
-        ></iframe>
-      </div>
-    </div>
+                <div class="made">
+                    🌱 Free to use. Always will be.<span></span> 
+                    Made with ❤️ in Nepal 🇳🇵
+                </div>
+            </div>
 
 
-    <!-- CTA Section -->
-    <div class="cta">
-      <h2>Never range-anxiety again.</h2>
-      <p>
-        Join EV drivers across Nepal who plan smarter, drive further,
-        and charge with confidence.
-      </p>
-
-      <div class="buttons">
-        <button class="primary">Start locating stations</button>
-        <button class="secondary">Add your station</button>
-      </div>
-    </div>
-    <!-- Footer -->
-      <div class="footer-center">
-        © 2026 ChargeNP. Built for Nepal’s EV drivers.
-      </div>
-
-      <div class="footer-right">
-        <a href="#">Terms</a>
-        <a href="find">Add station</a>
-        <a href="About">About</a>
-      </div>
+            <!-- RIGHT MAP -->
+             <div class="right">
+                <div class="map-card"> </div>
+            </div>
+        </section>
+        
+        
+        <!-- FEATURES -->
+        <section class="features">
+            <div>
+                <div class="feature-icon"> 🧭 </div>
+                <div>
+                    <b>One-tap Navigation </b>
+                    <p> Open in Google Maps </p>
+                </div>
+            </div>
+            
+            <div>
+                <div class="feature-icon"> 🔧 </div>
+                <div>
+                    <b> Smart Filters</b>
+                    <p> Connector type & availability </p>
+                </div>
+            </div>
+            
+            <div>
+                <div class="feature-icon"> 🛡️ </div>
+                <div>
+                    <b> Trusted & Open </b>
+                    <p> OpenStreetMap data you can trust </p>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
+
 
 <script setup>
 </script>
 
+
 <style scoped>
-/* Base */
-.home {
-  background: whitesmoke;
-  color: white;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+*{
+box-sizing:border-box;
 }
 
+.page{
+min-height:100vh;
+font-family:
+Inter,
+Arial,
+sans-serif;
+background:
+radial-gradient(
+circle at right bottom,
+#e9fff0,
+transparent 35%
+),
+white;
+color:#101828;
+}
 
-/* Hero */
+/* HERO */
 .hero{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 60px;
-  gap: 40px;
-  border-radius: 10px;
+display:grid;
+grid-template-columns:
+1fr 1fr;
+gap:55px;
+padding:55px 65px;
 }
 
-/* Text Section */
-.hero-text {
-  max-width: 600px;
+.badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:25px;
+border:1px solid #d8ecd9;
+color:#079447;
+background:#f7fff8;
 }
 
-.badge {
-  background: rgba(0, 229, 255, 0.1);
-  color: #00e5ff;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+h1{
+font-size:72px;
+line-height:1.15;
+letter-spacing:-2px;
+margin:25px 0;
+color: black;
 }
 
-h1 {
-  color: black;
-  font-size: 60px;
-  line-height: 1.1;
-  margin: 5px;
-  margin-left: 2px;
+h1 span{
+color:#29aa4c;
+position:relative;
 }
 
-p {
-  color: hsl(0, 0%, 0%);
-  margin-bottom: 25px;
+h1 span:after{
+content:"";
+position:absolute;
+left:0;
+bottom:-8px;
+width:100%;
+height:5px;
+background:#29aa4c;
+border-radius:50%;
 }
 
-/* Buttons */
-.buttons {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
+.left p{
+font-size:20px;
+color:#718096;
+max-width:650px;
+line-height:1.6;
 }
 
-.primary {
-  background: #00e5ff;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 25px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
+/* SEARCH */
+.search{
+height:80px;
+background:white;
+border-radius:18px;
+display:flex;
+padding:10px;
+box-shadow:
+0 10px 30px rgba(0,0,0,.08);
+margin:30px 0;
 }
 
-.secondary {
-  background: transparent;
-  border: 1px solid #00e5ff;
-  padding: 12px 20px;
-  border-radius: 25px;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
+.input{
+flex:1;
+display:flex;
+align-items:center;
+gap:15px;
+padding-left:20px;
+color:#8993a4;
+font-size:17px;
 }
 
-/* Tags */
-.tags{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-.tags span {
-  margin-right: 10px;
-  font-size: 20px;
-  background: rgba(66, 64, 64, 0.959);
-  padding: 5px 20px;
-  border-radius: 12px;
+.search button{
+width:210px;
+border:none;
+border-radius:15px;
+background:#23a847;
+color:white;
+font-size:17px;
 }
 
-/* Map Card */
-.map-card {
-  position: relative;
-  width: 550px;
-  height: 380px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #111;
+/* CARDS */
+.cards{
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+gap:12px;
 }
 
-.map-card iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.card{
+background:white;
+border-radius:18px;
+padding:18px;
+display:flex;
+gap:12px;
+box-shadow:
+0 5px 20px rgba(0,0,0,.07);
 }
 
-.cta-footer {
-  background: linear-gradient(180deg, #021a12, #01110c);
-  color: Black;
+.card small{
+display:block;
+color:#718096;
+margin-top:8px;
 }
 
-/* CTA */
-.cta {
-  text-align: center;
-  padding: 80px 20px 60px;
+.icon{
+width:42px;
+height:42px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.cta h2 {
-  color: green;
-  font-size: 28px;
-  margin-bottom: 10px;
+.green{
+background:#ddffe8;
 }
 
-.cta p {
-  color: black;
-  font-size: 14px;
-  margin-bottom: 25px;
+.yellow{
+background:#fff2ce;
 }
 
-/* Buttons */
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+.blue{
+background:#dceeff;
 }
 
-.primary {
-  background: #10b981;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 8px;
-  color: Black;
-  cursor: pointer;
-  font-weight: 500;
+.made{
+margin-top:25px;
+padding:20px;
+border:1px solid #c9e9ce;
+border-radius:15px;
+text-align:center;
+color:#0b9147;
 }
 
-.secondary {
-  background: transparent;
-  border: 1px solid #10b981;
-  padding: 12px 22px;
-  border-radius: 8px;
-  color: Black;
-  cursor: pointer;
+.made span{
+margin:0 20px;
+border-left:1px solid #aaa;
 }
 
-/* Footer */
-.footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
+/* MAP */
+.map-card{
+height:560px;
+border-radius:35px;
+overflow:hidden;
+position:relative;
+background:#dff7e8;
+box-shadow:
+0 20px 50px rgba(0,0,0,.1);
 }
 
-/* Center */
-.footer-center {
-  color: black;
+.map-card img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
-/* Right */
-.footer-right a {
-  margin-left: 15px;
-  color: Black;
-  text-decoration: none;
+.marker{
+position:absolute;
+height:48px;
+width:48px;
+border-radius:50%;
+background:#13a653;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border:5px solid white;
 }
 
-.footer-right a:hover {
-  color: Green;
+.status{
+position:absolute;
+bottom:20px;
+left:20px;
+right:20px;
+background:white;
+padding:18px;
+border-radius:15px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .footer {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-  .hero{
-     flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
+.status span{
+color:#079447;
+}
+
+.status label{
+float:right;
+color:#555;
+}
+
+/* FEATURES */
+.features{
+display:flex;
+justify-content:space-around;
+padding:35px 65px;
+background:white;
+}
+
+.features>div{
+display:flex;
+gap:15px;
+align-items:center;
+}
+
+.feature-icon{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#eaffef;
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+.features p{
+margin:5px 0;
+color:#718096;
+}
+
+@media(max-width:1000px){
+.hero{
+grid-template-columns:1fr;
+}
+
+.cards{
+grid-template-columns:
+repeat(2,1fr);
+}
+
+.header nav{
+display:none;
+}
+
 }
 
 </style>

@@ -24,14 +24,14 @@ import { RouterLink, RouterView } from 'vue-router'
       <div class="auth-buttons">
 
         <!-- EV User Login -->
-        <RouterLink to="/user-auth">
+        <RouterLink to="/user-auth" class="btn-link">
   <button class="login-btn">
     🚗 EV User
   </button>
 </RouterLink>
 
         <!-- Station Owner Login -->
-        <RouterLink to="/admin-login" class="btn-link">
+        <RouterLink to="/station-login" class="btn-link">
           <button class="login-btn">
            🔌 Station Owner
           </button>
