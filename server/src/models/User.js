@@ -20,6 +20,20 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String
     },
+    role: {
+      type: String,
+      enum: ['user', 'station_owner', 'admin'],
+      default: 'user'
+    },
+    vehicleType: {
+      type: String
+    },
+    businessName: {
+      type: String
+    },
+    location: {
+      type: String
+    },
     isActive: {
       type: Boolean,
       default: true

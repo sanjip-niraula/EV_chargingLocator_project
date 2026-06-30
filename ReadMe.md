@@ -1,184 +1,94 @@
-# 🔌 EV Charging Locator
+# ChargeNP - EV Charging Locator
 
-Find the nearest electric vehicle charging stations around you with real-time availability and pricing information.
+Full-stack platform for EV drivers to find charging stations with **live availability**, book slots, and pay online. Station owners can register, add stations/charger ports, and manage bookings.
 
----
+## Features
 
-## 📋 Table of Contents
+- **EV Users**: Find stations, view live port status, book charging slots, pay via eSewa/Khalti/Card (simulated gateway ready for production keys)
+- **Station Owners**: Add stations & charger ports, update live port status, manage bookings & revenue
+- **Live Status**: Auto-refreshing availability on station list and detail pages
+- **Booking Flow**: Time-slot booking → payment → check-in code
+- **REST API**: Express + MongoDB with JWT authentication
 
-- [Project Overview](#project-overview)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the Project](#running-the-project)
-- [Technologies](#technologies)
+## Tech Stack
 
----
+| Layer | Stack |
+|-------|-------|
+| Backend | Node.js, Express 5, Mongoose, JWT, bcryptjs |
+| Frontend | Vue 3, Vue Router, Vite, Axios |
+| Database | MongoDB |
+| Deploy | Docker Compose |
 
-## 📖 Project Overview
+## Quick Start (Local)
 
-EV Charging Locator is a full-stack application that helps electric vehicle owners find and locate charging stations nearby. The project consists of:
+### Prerequisites
+- Node.js 18+
+- pnpm
+- MongoDB running locally
 
-- **Backend**: Express.js REST API with MongoDB
-- **Frontend**: Vue 3 with Vue Router
-
----
-
-## ✅ Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Node.js** (v18 or higher)
-- **pnpm** (v10 or higher) - [Installation Guide](https://pnpm.io/installation)
-- **MongoDB** (v5 or higher) - [Installation Guide](https://docs.mongodb.com/manual/installation/)
-
-Verify installations:
-```bash
-node --version
-pnpm --version
-mongod --version
-```
-
----
-
-## Installation
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/sanjip-niraula/EV_chargingLocator_project.git
-cd EV_chargingLocator_project
-```
-
-### 2. Install Server Dependencies
+### 1. Backend
 ```bash
 cd server
+cp .env.example .env
 pnpm install
-cd ..
+pnpm seed        # optional: demo data
+pnpm dev
 ```
+Server: `http://localhost:5001`
 
-### 3. Install Client Dependencies
+### 2. Frontend
 ```bash
 cd client
+cp .env.example .env
 pnpm install
-cd ..
+pnpm dev
 ```
+App: `http://localhost:5173`
 
----
+### Demo Accounts (after seed)
+| Role | Email | Password |
+|------|-------|----------|
+| Station Owner | owner@chargenp.com | Owner123 |
+| EV User | user@chargenp.com | User1234 |
 
-## ⚙️ Configuration
+## Docker Deployment
+```bash
+export JWT_SECRET=your-secure-secret
+docker compose up --build
+```
+- Frontend: http://localhost:8080
+- API: http://localhost:5001
 
-### Server Environment Variables
+## API Endpoints
 
-Create a `.env` file in the `server/` directory:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/account/register` | Register user/owner |
+| POST | `/api/account/login` | Login |
+| GET | `/api/stations` | List stations (with live summary) |
+| GET | `/api/stations/:id/live` | Live port status |
+| POST | `/api/stations` | Add station (owner) |
+| POST | `/api/chargers` | Add charger port (owner) |
+| POST | `/api/bookings` | Create booking (user) |
+| POST | `/api/payments/confirm` | Complete payment |
 
-```env
-PORT=5000
-NODE_ENV=development
+## Environment Variables
+
+**Server** (`server/.env`):
+```
+PORT=5001
 DATABASE_URL=mongodb://127.0.0.1:27017/ev-charging
+JWT_SECRET=your-secret-key
+CLIENT_URL=http://localhost:5173
 ```
 
-**Variables:**
-- `PORT`: Server port (default: 5000)
-- `NODE_ENV`: Environment (development/production/test)
-- `DATABASE_URL`: MongoDB connection string
-
-### Make sure MongoDB is running:
-```bash
-# On macOS with Homebrew:
-brew services start mongodb-community
-
-# On Linux:
-sudo systemctl start mongod
+**Client** (`client/.env`):
+```
+VITE_API_URL=http://localhost:5001/api
 ```
 
----
-
-## 🏃 Running the Project
-
-### Option 1: Run Server and Client Separately
-
-**Terminal 1 - Start the Backend:**
-```bash
-cd server
-pnpm dev
-```
-Server will run at `http://localhost:5000`
-
-**Terminal 2 - Start the Frontend:**
-```bash
-cd client
-pnpm dev
-```
-Frontend will run at `http://localhost:5173` (or shown in terminal)
+## macOS Note
+Port 5000 is often used by AirPlay. This project defaults to **port 5001**.
 
 ---
-
-## 🛠️ Technologies
-
-### Backend
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM
-- **dotenv** - Environment management
-- **envalid** - Environment validation
-- **cors** - CORS middleware
-- **helmet** - Security headers
-- **morgan** - HTTP logging
-- **nodemon** - Auto-reload development server
-
-### Frontend
-- **Vue 3** - UI framework
-- **Vue Router** - Routing
-- **Vite** - Build tool
-- **pnpm** - Package manager
-
----
-
-## 🚦 Development Workflow
-
-### Server Development
-```bash
-cd server
-pnpm dev          # Start with hot-reload
-pnpm start        # Production build
-```
-
-### Client Development
-```bash
-cd client
-pnpm dev          # Start with hot-reload
-pnpm build        # Build for production
-pnpm preview      # Preview production build
-```
-
----
-
-## 📝 Available Scripts
-
-### Server
-- `pnpm dev` - Start development server
-- `pnpm start` - Start production server
-
-### Client
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm preview` - Preview production build
-
----
-
-## 🐛 Troubleshooting
-
-### MongoDB Connection Failed
-- Ensure MongoDB is running: `mongod` or `brew services start mongodb-community`
-- Check `DATABASE_URL` in `.env`
-
-### Port Already in Use
-- Change `PORT` in `.env`
-- Or kill process: `lsof -i :5000 | grep LISTEN | awk '{print $2}' | xargs kill -9`
-
-### Module Import Errors
-- Clear `node_modules`: `rm -rf node_modules && pnpm install`
-- Restart dev server
-
----
-**Happy Charging! ⚡**
+⚡ Happy Charging with ChargeNP!

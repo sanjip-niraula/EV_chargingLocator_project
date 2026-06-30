@@ -291,17 +291,21 @@ const loginOwner = async () => {
     });
 
     if (response.data.success) {
-      // Store token and user data
-      localStorage.setItem("adminAuth", "true");
-      localStorage.setItem("authToken", response.data.data.token);
-      localStorage.setItem("admin", JSON.stringify(response.data.data.user));
+      const user = response.data.data.user
 
-      successMessage.value = "Login successful! Redirecting...";
+      if (user.role !== 'station_owner') {
+        errorMessage.value = 'Please use the EV User portal to log in.'
+        return
+      }
 
-      // Redirect after short delay
+      localStorage.setItem('authToken', response.data.data.token)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      successMessage.value = "Login successful! Redirecting..."
+
       setTimeout(() => {
-        router.push("/admin/dashboard");
-      }, 1000);
+        router.push("/station/dashboard")
+      }, 1000)
     }
   } catch (err) {
     console.error("Login error:", err);
@@ -332,7 +336,7 @@ const registerOwner = async () => {
       phone: signup.value.phone,
       location: signup.value.stationLocation,
       password: signup.value.password,
-      role: "admin" // Mark as station owner
+      role: "station_owner"
     });
 
     if (response.data.success) {

@@ -31,7 +31,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </RouterLink>
 
         <!-- Station Owner Login -->
-        <RouterLink to="/admin-login" class="btn-link">
+        <RouterLink to="/station-login" class="btn-link">
           <button class="login-btn">
            🔌 Station Owner
           </button>

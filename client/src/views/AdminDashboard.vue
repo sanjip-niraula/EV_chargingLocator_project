@@ -44,8 +44,7 @@ const adminData = ref({
 
 const logout = () => {
   localStorage.removeItem('authToken')
-  localStorage.removeItem('adminAuth')
-  localStorage.removeItem('admin')
+  localStorage.removeItem('user')
   router.push('/')
 }
 </script>

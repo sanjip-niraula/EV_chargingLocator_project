@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { ChargerPort } from '../models/Charger.js';
 import { EvStation } from '../models/Station.js';
 import ApiResponse from '../utils/ApiResponse.js';
@@ -292,7 +293,7 @@ export const getPortStatisticsByStation = asyncHandler(async (req, res) => {
   const { stationId } = req.params;
 
   const stats = await ChargerPort.aggregate([
-    { $match: { station: mongoose.Types.ObjectId(stationId) } },
+    { $match: { station: new mongoose.Types.ObjectId(stationId) } },
     {
       $group: {
         _id: '$availability',

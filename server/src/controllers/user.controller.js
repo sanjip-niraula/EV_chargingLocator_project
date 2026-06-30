@@ -2,7 +2,8 @@ import { User } from '../models/User.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import ApiError from '../utils/ApiError.js';
 import asyncHandler from '../utils/asyncHandler.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils/jwt.js';
 
 // ─── Create User ────────────────────────────────────────
 export const createUser = asyncHandler(async (req, res) => {
@@ -203,11 +204,12 @@ export const loginUser = asyncHandler(async (req, res) => {
   const userResponse = user.toObject();
   delete userResponse.password;
 
-  // In a real application, you would generate a JWT token here
+  const token = generateToken(user._id, user.role);
+
   res.status(200).json(
     new ApiResponse(200, 'Login successful', {
       user: userResponse,
-      token: 'JWT_TOKEN_HERE' // Replace with actual JWT generation
+      token
     })
   );
 });

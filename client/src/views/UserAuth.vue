@@ -48,10 +48,15 @@ const login = async () => {
     })
 
     if (response.data.success) {
-      // Store token and user data
-      localStorage.setItem('userAuth', 'true')
+      const user = response.data.data.user
+
+      if (user.role !== 'user') {
+        errorMessage.value = 'Please use the Station Owner portal to log in.'
+        return
+      }
+
       localStorage.setItem('authToken', response.data.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.data.user))
+      localStorage.setItem('user', JSON.stringify(user))
       
       successMessage.value = 'Login successful! Redirecting...'
       
@@ -87,7 +92,8 @@ const register = async () => {
       email: signupData.value.email,
       phone: signupData.value.phone,
       vehicleType: signupData.value.vehicleType,
-      password: signupData.value.password
+      password: signupData.value.password,
+      role: 'user'
     })
 
     if (response.data.success) {
