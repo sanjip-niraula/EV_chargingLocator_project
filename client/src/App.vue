@@ -24,23 +24,6 @@
             <div class="user-avatar">{{ authUser.name?.[0]?.toUpperCase() }}</div>
             <span class="user-name">{{ authUser.name?.split(' ')[0] }}</span>
             <span class="chevron" :class="{ open: menuOpen }">▾</span>
-      <!-- Login Buttons -->
-      <div class="auth-buttons">
-
-        <!-- EV User Login -->
-        <RouterLink to="/user-auth" class="btn-link">
-  <button class="login-btn">
-    🚗 EV User
-  </button>
-</RouterLink>
-
-        <!-- Station Owner Login -->
-        <RouterLink to="/station-login" class="btn-link">
-          <button class="login-btn">
-           🔌 Station Owner
-          </button>
-        </RouterLink>
-
             <div class="dropdown" v-if="menuOpen">
               <RouterLink :to="dashboardPath" @click="menuOpen = false">Dashboard</RouterLink>
               <button @click="logout" class="logout-item">Logout</button>
@@ -131,12 +114,19 @@ watch(route, () => { mobileOpen.value = false })
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #0a0e1a;
+  background-color: #080a12;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 229, 157, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
   color: #f1f5f9;
   line-height: 1.6;
 }
 
-#app { min-height: 100vh; }
+#app { 
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
 </style>
 
 <style scoped>
@@ -205,20 +195,20 @@ body {
 .nav-btn-ghost:hover { color: #f1f5f9; border-color: rgba(255,255,255,0.25); }
 
 .nav-btn-primary {
-  background: linear-gradient(135deg, #00e59d, #00b4a0);
-  color: #0a1a0e;
+  background: linear-gradient(135deg, #00e59d, #00d98b);
+  color: #051610;
   text-decoration: none;
   font-size: 14px;
   font-weight: 700;
-  padding: 9px 18px;
-  border-radius: 8px;
-  transition: all 0.2s;
-  box-shadow: 0 4px 15px rgba(0, 229, 157, 0.25);
+  padding: 10px 22px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 229, 157, 0.2);
 }
 
 .nav-btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 229, 157, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 229, 157, 0.4);
 }
 
 /* User dropdown */

@@ -298,7 +298,10 @@ onUnmounted(() => clearInterval(pollTimer))
 
 .find-page {
   min-height: calc(100vh - 65px);
-  background: #0a0e1a;
+  background-color: #080a12;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 229, 157, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
   color: #f1f5f9;
   font-family: 'Inter', sans-serif;
 }
@@ -684,17 +687,21 @@ onUnmounted(() => clearInterval(pollTimer))
 .view-btn {
   flex: 1;
   padding: 10px;
-  background: linear-gradient(135deg, #00e59d, #00b4a0);
-  color: #0a1a0e;
+  background: linear-gradient(135deg, #00e59d, #00d98b);
+  color: #03150d;
   text-decoration: none;
-  border-radius: 9px;
+  border-radius: 12px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   text-align: center;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 229, 157, 0.15);
 }
 
-.view-btn:hover { opacity: 0.9; }
+.view-btn:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 229, 157, 0.3);
+}
 
 .directions-btn {
   flex: 1;

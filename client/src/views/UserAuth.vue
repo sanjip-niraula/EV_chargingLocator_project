@@ -160,7 +160,10 @@ const handleSubmit = async () => {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: #0a0e1a;
+  background-color: #080a12;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 229, 157, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
   font-family: 'Inter', sans-serif;
 }
 
@@ -326,21 +329,22 @@ const handleSubmit = async () => {
 
 .submit-btn {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #00e59d, #00b4a0);
+  padding: 16px;
+  background: linear-gradient(135deg, #00e59d, #00d98b);
   border: none;
   border-radius: 12px;
-  color: #0a1a0e;
+  color: #03150d;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   margin-top: 12px;
-  transition: transform 0.2s, opacity 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(0, 229, 157, 0.2);
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  opacity: 0.95;
+  box-shadow: 0 12px 35px rgba(0, 229, 157, 0.35);
 }
 
 .submit-btn:disabled {

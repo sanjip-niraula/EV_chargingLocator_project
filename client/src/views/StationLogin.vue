@@ -371,12 +371,10 @@ const registerOwner = async () => {
   justify-content: center;
   align-items: center;
   padding: 30px;
-  background: linear-gradient(
-    135deg,
-    #022c22,
-    #063d33,
-    #021f1b
-  );
+  background-color: #080a12;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 229, 157, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 61, 51, 0.2) 0px, transparent 50%);
 }
 
 .login-card {
@@ -556,19 +554,20 @@ const registerOwner = async () => {
 .login-btn {
   width: 100%;
   border: none;
-  padding: 15px;
-  border-radius: 10px;
-  background: #00c17c;
-  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00e59d, #00d98b);
+  color: #03150d;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
-  transition: .3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(0, 229, 157, 0.2);
 }
 
 .login-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  background: #009d66;
+  box-shadow: 0 12px 35px rgba(0, 229, 157, 0.35);
 }
 
 .login-btn:disabled {
